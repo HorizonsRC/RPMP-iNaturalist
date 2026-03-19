@@ -1,21 +1,21 @@
 {
-  "last_updated": "2026-03-19T02:35:26Z",
-  "total_observations": 517,
+  "last_updated": "2026-03-19T04:15:22Z",
+  "total_observations": 509,
   "new_observations": 0,
   "date_breakdown": {
     "last_7_days": 4,
     "last_30_days": 8,
     "last_3_months": 20,
-    "last_year": 64,
-    "older_than_1_year": 416,
+    "last_year": 63,
+    "older_than_1_year": 409,
     "unknown": 5
   },
   "categories": {
     "eradication": {
-      "count": 137,
+      "count": 133,
       "species_in_list": 27,
       "unique_observed": 14,
-      "smu_match_rate": 97.8,
+      "smu_match_rate": 97.7,
       "most_recent": {
         "date": "2026-03-16",
         "species": "Woolly Nightshade",
@@ -31,20 +31,20 @@
           "count": 33
         },
         {
-          "species": "Cathedral Bells",
-          "count": 12
-        },
-        {
           "species": "Gunnera",
           "count": 11
         },
         {
-          "species": "Queensland Poplar",
-          "count": 7
+          "species": "Cathedral Bells",
+          "count": 11
         },
         {
           "species": "Himalayan Balsam",
           "count": 5
+        },
+        {
+          "species": "Queensland Poplar",
+          "count": 4
         },
         {
           "species": "Blue Passionflower",
@@ -108,10 +108,10 @@
       "source": "gdb"
     },
     "progressive_containment": {
-      "count": 377,
+      "count": 373,
       "species_in_list": 23,
       "unique_observed": 8,
-      "smu_match_rate": 69.2,
+      "smu_match_rate": 69.4,
       "most_recent": {
         "date": "2026-03-13",
         "species": "Old Man's Beard",
@@ -120,11 +120,11 @@
       "species_breakdown": [
         {
           "species": "Old Man's Beard",
-          "count": 173
+          "count": 172
         },
         {
           "species": "Banana Passionfruit",
-          "count": 85
+          "count": 84
         },
         {
           "species": "Boneseed",
@@ -132,7 +132,7 @@
         },
         {
           "species": "Grey Willow",
-          "count": 23
+          "count": 22
         },
         {
           "species": "Darwin's Barberry",
@@ -144,7 +144,7 @@
         },
         {
           "species": "Evergreen Buckthorn",
-          "count": 16
+          "count": 15
         },
         {
           "species": "Moth Plant",
@@ -155,20 +155,20 @@
     }
   },
   "system": {
-    "agol_status": "success",
+    "agol_status": "unknown",
     "email_status": "none needed",
-    "last_pipeline_run": "2026-03-19 05:02:55",
-    "log_file": "iNat_Pipeline_20260319_050026.log",
+    "last_pipeline_run": null,
+    "log_file": "iNat_Pipeline_20260319_170521.log",
     "agol_live_counts": {
       "iNat_Exclusion": 3,
-      "iNat_Eradication": 137,
+      "iNat_Eradication": 0,
       "iNat_ProgressiveContainment": 377,
-      "iNat_AllProgrammes": 517
+      "iNat_AllProgrammes": 509
     }
   },
   "warnings": [
-    "Progressive Containment: 39 observations without SMU layer",
-    "Exclusion: 2 observations without SMU layer"
+    "Eradication: GDB has 133 features, AGOL has 0 \u2014 possible sync issue",
+    "Progressive Containment: GDB has 373 features, AGOL has 377 \u2014 possible sync issue"
   ],
   "recent_observations": [
     {
@@ -207,6 +207,13 @@
       "id": 342153773
     },
     {
+      "species": "Pest Conifers",
+      "category": "Progressive Containment",
+      "location": "Tongariro",
+      "observed_on": "2026-03-05",
+      "id": 341355234
+    },
+    {
       "species": "Old Man's Beard",
       "category": "Progressive Containment",
       "location": "Palmerston North",
@@ -219,13 +226,6 @@
       "location": "Tararua",
       "observed_on": "2026-03-05",
       "id": 341430523
-    },
-    {
-      "species": "Pest Conifers",
-      "category": "Progressive Containment",
-      "location": "Tongariro",
-      "observed_on": "2026-03-05",
-      "id": 341355234
     },
     {
       "species": "Moth Plant",

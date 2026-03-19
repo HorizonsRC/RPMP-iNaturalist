@@ -1,0 +1,26 @@
+# ============================================================================
+# .gitignore — files that should NEVER be uploaded to GitHub
+# ============================================================================
+
+# --- Sensitive config (contains passwords and API keys) ---
+config.py
+
+# --- iNaturalist OAuth token (contains your personal access token) ---
+inat_token.json
+
+# --- Log files (large, machine-specific, not useful on GitHub) ---
+Logs/
+*.log
+
+# --- Python cache files (auto-generated, not needed) ---
+__pycache__/
+*.py[cod]
+*.pyo
+
+# --- OS junk files ---
+.DS_Store
+Thumbs.db
+
+# --- Virtual environment (if you ever create one) ---
+venv/
+.env

@@ -120,7 +120,7 @@ body { font-family: -apple-system,"Segoe UI",Helvetica,Arial,sans-serif; font-si
 async function load(){
   let data;
   try{
-    const r=await fetch('https://bort92.github.io/RPMP-iNaturalist/dashboard_data.json?_='+Date.now());
+    const r=await fetch('https://HorizonsRC.github.io/RPMP-iNaturalist/dashboard_data.json?_='+Date.now());
     if(!r.ok)throw new Error();
     data=await r.json();
   }catch(e){

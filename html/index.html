@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RPMP iNaturalist Observations</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --dark:        #1e2d2b;
+  --bg:          #f0efeb;
+  --surface:     #ffffff;
+  --border:      rgba(0,0,0,0.09);
+  --border2:     rgba(0,0,0,0.15);
+  --text:        #1a1a18;
+  --muted:       #6b6b67;
+  --faint:       #9a9a96;
+  --rad-md:      8px;
+  --rad-lg:      12px;
+  --excl-accent: #A32D2D; --excl-bg: #FCEBEB; --excl-fg: #A32D2D;
+  --erad-accent: #7A5C00; --erad-bg: #FFF8DC; --erad-fg: #7A5C00;
+  --prog-accent: #3B6D11; --prog-bg: #EAF3DE; --prog-fg: #3B6D11;
+}
+html, body { height:100%; background:var(--bg); overflow:hidden; }
+body { font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif; font-size:15px; color:var(--text); display:flex; flex-direction:column; height:100vh; }
+
+/* HEADER */
+.header { background:var(--dark); padding:14px 24px 12px; flex-shrink:0; display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
+.header-org { font-size:11px; font-weight:600; letter-spacing:0.1em; color:rgba(255,255,255,0.45); text-transform:uppercase; margin-bottom:4px; }
+.header-title { font-size:22px; font-weight:700; color:#fff; letter-spacing:-0.3px; line-height:1.1; }
+.header-sub { font-size:12px; color:rgba(255,255,255,0.5); margin-top:3px; }
+.header-right { display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0; }
+.live-pill { display:flex; align-items:center; gap:5px; font-size:11px; color:rgba(255,255,255,0.6); background:rgba(255,255,255,0.1); padding:4px 10px; border-radius:20px; border:0.5px solid rgba(255,255,255,0.15); }
+.live-dot { width:6px; height:6px; border-radius:50%; background:#6fcf8e; }
+.header-updated { font-size:10px; color:rgba(255,255,255,0.38); }
+
+/* BODY */
+.body { flex:1; min-height:0; padding:14px 20px; display:flex; flex-direction:column; gap:10px; }
+
+/* STATS */
+.stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; flex-shrink:0; }
+.stat { background:var(--surface); border-radius:var(--rad-md); border:0.5px solid var(--border); padding:10px 16px; display:flex; align-items:center; gap:10px; }
+.stat-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.stat-dot.green { background:#3B6D11; }
+.stat-dot.blue  { background:#185FA5; }
+.stat-dot.amber { background:#854F0B; }
+.stat-dot.slate { background:#5F5E5A; }
+.stat-lbl { font-size:11px; color:var(--muted); margin-bottom:1px; }
+.stat-val { font-size:20px; font-weight:600; line-height:1; color:var(--text); }
+.stat-sub { font-size:11px; color:var(--faint); margin-top:2px; }
+.clr-warn { color:#854F0B; }
+
+/* MAIN */
+.main { flex:1; min-height:0; display:grid; grid-template-columns:1fr 300px; gap:10px; }
+
+/* CATS */
+.cats { display:flex; flex-direction:column; gap:8px; min-height:0; }
+
+/* CATEGORY CARDS — horizontal layout */
+.cat-card { background:var(--surface); border:0.5px solid var(--border); border-radius:var(--rad-lg); display:flex; flex-direction:row; overflow:hidden; text-decoration:none; color:inherit; transition:box-shadow 0.15s,border-color 0.15s; flex:1; min-height:0; }
+.cat-card:hover { border-color:var(--border2); box-shadow:0 2px 10px rgba(0,0,0,0.07); }
+.cat-accent { width:4px; flex-shrink:0; }
+.cat-accent.excl { background:var(--excl-accent); }
+.cat-accent.erad { background:var(--erad-accent); }
+.cat-accent.prog { background:var(--prog-accent); }
+.cat-body { padding:12px 18px; flex:1; display:flex; flex-direction:row; align-items:center; gap:24px; min-width:0; }
+.cat-main { flex:1; min-width:0; }
+.cat-tag { display:inline-block; font-size:12px; font-weight:600; padding:4px 12px; border-radius:20px; margin-bottom:8px; letter-spacing:0.02em; }
+.cat-tag.excl { background:var(--excl-bg); color:var(--excl-fg); }
+.cat-tag.erad { background:var(--erad-bg); color:var(--erad-fg); }
+.cat-tag.prog { background:var(--prog-bg); color:var(--prog-fg); }
+.cat-desc { font-size:13px; color:var(--muted); line-height:1.55; }
+.cat-nums { display:flex; gap:28px; flex-shrink:0; }
+.cat-num { font-size:12px; color:var(--faint); text-align:center; }
+.cat-species { font-size:12px; color:var(--faint); font-style:italic; }
+.cat-num strong { display:block; font-size:30px; font-weight:600; color:var(--text); line-height:1.1; }
+.cat-footer { padding:0 18px; border-left:0.5px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:8px; flex-shrink:0; font-size:13px; font-weight:500; width:155px; }
+.cat-footer.excl { color:var(--excl-fg); background:#fef8f8; }
+.cat-footer.erad { color:var(--erad-fg); background:#fffdf0; }
+.cat-footer.prog { color:var(--prog-fg); background:#f4faf0; }
+
+/* FEED */
+.feed-panel { background:var(--surface); border:0.5px solid var(--border); border-radius:var(--rad-lg); display:flex; flex-direction:column; min-height:0; overflow:hidden; }
+.feed-hd { padding:10px 14px; border-bottom:0.5px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+.feed-hd-title { font-size:13px; font-weight:600; color:var(--text); }
+.feed-badge { font-size:11px; color:var(--faint); background:var(--bg); padding:2px 7px; border-radius:20px; border:0.5px solid var(--border); }
+.feed-list { overflow-y:auto; flex:1; }
+.fi { padding:8px 12px; border-bottom:0.5px solid var(--border); display:flex; gap:9px; align-items:flex-start; }
+.fi:last-child { border-bottom:none; }
+.fi-icon { width:24px; height:24px; border-radius:5px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:9px; font-weight:700; margin-top:1px; }
+.fi-icon.erad { background:var(--erad-bg); color:var(--erad-fg); }
+.fi-icon.excl { background:var(--excl-bg); color:var(--excl-fg); }
+.fi-icon.prog { background:var(--prog-bg); color:var(--prog-fg); }
+.fi-body { flex:1; min-width:0; }
+.fi-name { font-size:12px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.fi-meta { font-size:11px; color:var(--muted); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.fi-time { font-size:11px; color:var(--faint); white-space:nowrap; margin-top:2px; }
+
+.msg { padding:2rem; text-align:center; color:var(--faint); font-size:12px; }
+.msg.err { color:var(--erad-fg); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-org">Horizons Regional Council</div>
+    <div class="header-title">RPMP iNaturalist Observations</div>
+    <div class="header-sub"><a href="https://www.inaturalist.org/projects/horizons-regional-council-pest-plants" target="_blank" style="color:rgba(255,255,255,0.55);text-decoration:none;border-bottom:0.5px solid rgba(255,255,255,0.25);">iNaturalist: Horizons Regional Council Pest Plants ↗</a></div>
+  </div>
+  <div class="header-right">
+    <span class="live-pill"><span class="live-dot"></span>Live data</span>
+    <span class="header-updated" id="updated"></span>
+  </div>
+</div>
+
+<div class="body">
+
+  <div class="stats">
+    <div class="stat"><span class="stat-dot green"></span><div><div class="stat-lbl">Total observations</div><div class="stat-val" id="s-total">—</div><div class="stat-sub" id="s-total-sub"></div></div></div>
+    <div class="stat"><span class="stat-dot blue"></span><div><div class="stat-lbl">Last 7 days</div><div class="stat-val" id="s-7d">—</div><div class="stat-sub">recent observations</div></div></div>
+    <div class="stat"><span class="stat-dot amber"></span><div><div class="stat-lbl">Obs since last run</div><div class="stat-val" id="s-new">—</div><div class="stat-sub" id="s-new-sub"></div></div></div>
+    <div class="stat"><span class="stat-dot slate"></span><div><div class="stat-lbl">Species tracked</div><div class="stat-val" id="s-sp">—</div><div class="stat-sub">in programme lists</div></div></div>
+  </div>
+
+  <div class="main">
+    <div class="cats">
+
+      <a class="cat-card" href="https://experience.arcgis.com/experience/82aa7e1a43d348b58faab84c956019b6/page/Exclusion" target="_blank">
+        <div class="cat-accent excl"></div>
+        <div class="cat-body">
+          <div class="cat-main">
+            <span class="cat-tag excl">Exclusion</span>
+            <div class="cat-desc">Preventing the introduction of high-risk species not currently present in the region.<br><span class="cat-species">African Feathergrass, California Bulrush, Chilean Needle Grass, Heath Rush, Humped Bladderwort, Manchurian Wild Rice, Noogoora Burr, Common Reed, Saffron Thistle, Arrowhead, Sweet Pittosporum, Tussock Hawkweed</span></div>
+          </div>
+          <div class="cat-nums">
+            <div class="cat-num"><strong id="x-obs">—</strong>observations</div>
+            <div class="cat-num"><strong id="x-sp">—</strong>species listed</div>
+            <div class="cat-num"><strong id="x-smu">—</strong>% SMU match</div>
+          </div>
+        </div>
+        <div class="cat-footer excl"><span>Open dashboard</span><span>→</span></div>
+      </a>
+
+      <a class="cat-card" href="https://experience.arcgis.com/experience/82aa7e1a43d348b58faab84c956019b6/page/Eradication" target="_blank">
+        <div class="cat-accent erad"></div>
+        <div class="cat-body">
+          <div class="cat-main">
+            <span class="cat-tag erad">Eradication</span>
+            <div class="cat-desc">Detecting and removing all known infestations to prevent further establishment.<br><span class="cat-species">Alligator Weed, Blue Passionflower, Cathedral Bells, Chilean &amp; Giant Rhubarb, Chinese Pennisetum, Climbing Alstroemeria, Climbing Spindleberry, Himalayan Balsam, Knotweed species, Nassella Tussock, Purple Loosestrife, Queensland Poplar, Black/Rum Cherry, Senegal Tea, Spartina species, Woolly Nightshade</span></div>
+          </div>
+          <div class="cat-nums">
+            <div class="cat-num"><strong id="e-obs">—</strong>observations</div>
+            <div class="cat-num"><strong id="e-sp">—</strong>species listed</div>
+            <div class="cat-num"><strong id="e-smu">—</strong>% SMU match</div>
+          </div>
+        </div>
+        <div class="cat-footer erad"><span>Open dashboard</span><span>→</span></div>
+      </a>
+
+      <a class="cat-card" href="https://experience.arcgis.com/experience/82aa7e1a43d348b58faab84c956019b6/page/Progressive-Containment" target="_blank">
+        <div class="cat-accent prog"></div>
+        <div class="cat-body">
+          <div class="cat-main">
+            <span class="cat-tag prog">Progressive Containment</span>
+            <div class="cat-desc">Reducing the distribution and density of established pest plants over time.<br><span class="cat-species">Banana Passionfruit, Boneseed, Darwin's Barberry, Evergreen Buckthorn, Grey Willow, Moth Plant, Old Man's Beard, Pest Conifers</span></div>
+          </div>
+          <div class="cat-nums">
+            <div class="cat-num"><strong id="p-obs">—</strong>observations</div>
+            <div class="cat-num"><strong id="p-sp">—</strong>species listed</div>
+            <div class="cat-num"><strong id="p-smu">—</strong>% SMU match</div>
+          </div>
+        </div>
+        <div class="cat-footer prog"><span>Open dashboard</span><span>→</span></div>
+      </a>
+
+    </div>
+
+    <div class="feed-panel">
+      <div class="feed-hd">
+        <span class="feed-hd-title">Recent activity</span>
+        <span class="feed-badge" id="feed-badge"></span>
+      </div>
+      <div class="feed-list" id="feed"><div class="msg">Loading…</div></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function fmt(n){return n==null?'—':Number(n).toLocaleString();}
+function pct(n){return n==null?'—':n+'%';}
+function rel(s){
+  if(!s)return'';const d=new Date(s);if(isNaN(d))return s.slice(0,10);
+  const t=(Date.now()-d)/1000;
+  if(t<3600)return Math.floor(t/60)+'m ago';
+  if(t<86400)return Math.floor(t/3600)+'h ago';
+  if(t<604800)return Math.floor(t/86400)+'d ago';
+  return d.toLocaleDateString('en-NZ',{day:'numeric',month:'short'});
+}
+function cc(c){if(!c)return'prog';const l=c.toLowerCase();if(l.includes('erad'))return'erad';if(l.includes('excl'))return'excl';return'prog';}
+function ab(c){if(!c)return'PC';const l=c.toLowerCase();if(l.includes('erad'))return'ER';if(l.includes('excl'))return'EX';return'PC';}
+
+async function load(){
+  let data;
+  try{
+    const r=await fetch('https://bort92.github.io/RPMP-iNaturalist/dashboard_data.json?_='+Date.now());
+    if(!r.ok)throw new Error();
+    data=await r.json();
+  }catch(e){
+    document.getElementById('feed').innerHTML='<div class="msg err">Could not load dashboard_data.json</div>';
+    return;
+  }
+  if(data.last_updated){
+    const d=new Date(data.last_updated);
+    document.getElementById('updated').textContent='Updated '+d.toLocaleString('en-NZ',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  }
+  document.getElementById('s-total').textContent=fmt(data.total_observations);
+  document.getElementById('s-total-sub').textContent=fmt(data.date_breakdown?.last_30_days||0)+' in last 30 days';
+  document.getElementById('s-7d').textContent=fmt(data.date_breakdown?.last_7_days||0);
+  const nw=data.new_observations||0;
+  document.getElementById('s-new').textContent=fmt(nw);
+  const ns=document.getElementById('s-new-sub');
+  ns.textContent=nw>0?'since last script run':'none since last run';
+  ns.className='stat-sub '+(nw>0?'clr-warn':'');
+  const tot=(data.categories.eradication?.species_in_list||0)+(data.categories.exclusion?.species_in_list||0)+(data.categories.progressive_containment?.species_in_list||0);
+  document.getElementById('s-sp').textContent=fmt(tot);
+  const e=data.categories.eradication,x=data.categories.exclusion,p=data.categories.progressive_containment;
+  document.getElementById('e-obs').textContent=fmt(e?.count);document.getElementById('e-sp').textContent=fmt(e?.species_in_list);document.getElementById('e-smu').textContent=pct(e?.smu_match_rate);
+  document.getElementById('x-obs').textContent=fmt(x?.count);document.getElementById('x-sp').textContent=fmt(x?.species_in_list);document.getElementById('x-smu').textContent=pct(x?.smu_match_rate);
+  document.getElementById('p-obs').textContent=fmt(p?.count);document.getElementById('p-sp').textContent=fmt(p?.species_in_list);document.getElementById('p-smu').textContent=pct(p?.smu_match_rate);
+  const obs=data.recent_observations||[];
+  document.getElementById('feed-badge').textContent=fmt(obs.length)+' recent';
+  document.getElementById('feed').innerHTML=obs.length===0
+    ?'<div class="msg">No recent observations</div>'
+    :obs.map(o=>`<div class="fi"><div class="fi-icon ${cc(o.category)}">${ab(o.category)}</div><div class="fi-body"><div class="fi-name">${o.species||'Unknown'}</div><div class="fi-meta">${o.category||''}${o.location?' · '+o.location:''}</div></div><div class="fi-time">${rel(o.observed_on)}</div></div>`).join('');
+}
+load();
+</script>
+</body>
+</html>

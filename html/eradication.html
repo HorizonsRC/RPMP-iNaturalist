@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eradication Chart</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f0efeb; --surface: #ffffff;
+  --border: rgba(0,0,0,0.09);
+  --text: #1a1a18; --muted: #6b6b67; --faint: #9a9a96;
+  --rad-md: 8px; --rad-lg: 12px;
+  --cat-accent: #7A5C00; --cat-fg: #7A5C00;
+}
+html, body { height:100%; background:var(--bg); overflow:hidden; }
+body { font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif; font-size:14px; color:var(--text); display:flex; flex-direction:column; height:100vh; padding:10px 12px 10px; gap:8px; }
+
+/* STAT CARDS */
+.stats-col { display:flex; flex-direction:column; gap:6px; height:100%; }
+.stat { background:var(--surface); border:0.5px solid var(--border); border-radius:var(--rad-md); padding:12px 14px; border-left:3px solid var(--cat-accent); flex:1; display:flex; flex-direction:column; justify-content:center; }
+.stat-lbl { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px; }
+.stat-val { font-size:26px; font-weight:700; color:var(--text); line-height:1; }
+.stat-sub { font-size:11px; color:var(--faint); margin-top:4px; }
+.stat-sub.highlight { color:var(--cat-fg); font-weight:500; }
+
+/* MAIN ROW */
+.main { flex:1; min-height:0; display:grid; grid-template-columns:160px 1fr; gap:8px; align-items:stretch; }
+
+/* CHART */
+.chart-panel { background:var(--surface); border:0.5px solid var(--border); border-radius:var(--rad-lg); display:flex; flex-direction:column; min-height:0; overflow:hidden; }
+.chart-hd { padding:8px 12px; border-bottom:0.5px solid var(--border); flex-shrink:0; display:flex; align-items:center; justify-content:space-between; }
+.chart-hd-title { font-size:11px; font-weight:600; color:var(--text); }
+.chart-hd-sub { font-size:10px; color:var(--faint); }
+.chart-body { flex:1; min-height:0; padding:8px 10px; overflow-y:auto; }
+</style>
+</head>
+<body>
+
+<div class="main">
+  <div class="stats-col">
+    <div class="stat">
+      <div class="stat-lbl">Total observations</div>
+      <div class="stat-val" id="s-obs">—</div>
+      <div class="stat-sub">eradication category</div>
+    </div>
+    <div class="stat">
+      <div class="stat-lbl">Species in programme</div>
+      <div class="stat-val" id="s-sp">27</div>
+      <div class="stat-sub" id="s-unique"></div>
+    </div>
+    <div class="stat">
+      <div class="stat-lbl">Most recent</div>
+      <div class="stat-val" id="s-recent" style="font-size:18px;line-height:1.3;">—</div>
+      <div class="stat-sub highlight" id="s-recent-sub"></div>
+    </div>
+  </div>
+
+  <div class="chart-panel">
+    <div class="chart-hd">
+      <span class="chart-hd-title">Observations by species</span>
+      <span class="chart-hd-sub" id="chart-sub"></span>
+    </div>
+    <div class="chart-body">
+      <canvas id="bar-chart"></canvas>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+async function load(){
+  let data;
+  try{
+    const r=await fetch('https://bort92.github.io/RPMP-iNaturalist/dashboard_data.json?_='+Date.now());
+    if(!r.ok)throw new Error();
+    data=await r.json();
+  }catch(e){ return; }
+
+  const cat=data.categories?.eradication||{};
+  document.getElementById('s-obs').textContent=cat.count!=null?cat.count.toLocaleString():'—';
+  if(cat.unique_observed) document.getElementById('s-unique').textContent=cat.unique_observed+' species observed';
+
+  const mr=cat.most_recent||{};
+  if(mr.date){
+    const d=new Date(mr.date);
+    document.getElementById('s-recent').textContent=d.toLocaleDateString('en-NZ',{day:'numeric',month:'short',year:'numeric'});
+    document.getElementById('s-recent-sub').textContent=mr.species+(mr.location?' · '+mr.location:'');
+  }
+
+  const breakdown=(cat.species_breakdown||[]).sort((a,b)=>b.count-a.count);
+  if(!breakdown.length) return;
+
+  document.getElementById('chart-sub').textContent=breakdown.length+' species';
+
+  const labels=breakdown.map(x=>x.species);
+  const counts=breakdown.map(x=>x.count);
+  const total=counts.reduce((a,b)=>a+b,0);
+
+  const barH=22;
+  const canvas=document.getElementById('bar-chart');
+  canvas.style.height=(labels.length*barH+40)+'px';
+  canvas.style.width='100%';
+
+  new Chart(canvas,{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[{
+        data:counts,
+        backgroundColor:'#C49520',
+        borderColor:'#7A5C00',
+        borderWidth:1,
+        borderRadius:4,
+        hoverBackgroundColor:'#7A5C00'
+      }]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{ display:false },
+        tooltip:{
+          callbacks:{
+            label:function(ctx){
+              const pct=Math.round(ctx.parsed.x/total*100);
+              return ' '+ctx.parsed.x+' obs ('+pct+'%)';
+            }
+          }
+        }
+      },
+      scales:{
+        x:{ grid:{color:'rgba(0,0,0,0.05)'}, ticks:{font:{size:10},color:'#6b6b67'}, border:{display:false} },
+        y:{ grid:{display:false}, ticks:{font:{size:10},color:'#1a1a18'}, border:{display:false} }
+      }
+    }
+  });
+}
+load();
+</script>
+</body>
+</html>

@@ -166,8 +166,6 @@ Additional filters: `activeSite = 'Y'` (excludes historic sites), species-matche
 
 Observations where `is_in_site = 'N'` may indicate a new infestation outside of existing managed areas and should be assessed by the relevant field staff.
 
-> **Note:** These two fields must be manually added to the `iNat_Eradication`, `iNat_ProgressiveContainment`, and `iNat_AllProgrammes` layers in the AGOL hosted feature service before running the pipeline for the first time. Go to the item in AGOL → Data → Fields → Add Field.
-
 ---
 
 ## Credentials and Security

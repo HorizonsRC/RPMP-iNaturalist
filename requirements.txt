@@ -1,0 +1,27 @@
+# ============================================================================
+# requirements.txt — RPMP iNaturalist Pipeline
+# ============================================================================
+# Tested with ArcGIS Pro 3.5.3 / Python 3.11.11
+# Environment: arcpro-scripts-3-5 (cloned ArcGIS Pro conda environment)
+#
+# Install all dependencies at once:
+#   pip install -r requirements.txt
+#
+# Note: arcpy is not listed here — it is bundled with ArcGIS Pro and cannot
+# be installed via pip. This project requires ArcGIS Pro 3.x to be installed.
+# ============================================================================
+
+# Core data processing
+pandas==2.2.3
+geopandas==0.14.4
+shapely==2.0.1
+
+# iNaturalist API authentication
+requests==2.32.5
+requests-oauthlib==2.0.0
+
+# ArcGIS Online integration
+arcgis==2.4.1.1
+
+# GitHub automation (dashboard JSON push)
+gitpython==3.1.46

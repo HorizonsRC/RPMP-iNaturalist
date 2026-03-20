@@ -63,11 +63,20 @@ def create_immediate_alert_email(observations, staff_name, operating_area):
     
     obs_list = ""
     for obs in observations:
+        # Build site status line
+        is_in_site = obs.get('is_in_site', 'N')
+        base_site_id = obs.get('BaseSiteID')
+        if is_in_site == 'Y' and base_site_id:
+            site_html = f"<p style='margin: 5px 0;'><strong>Managed site:</strong> ✅ Yes — <strong>{base_site_id}</strong></p>"
+        else:
+            site_html = "<p style='margin: 5px 0; color: #d32f2f;'><strong>Managed site:</strong> ⚠️ No — may be a new infestation</p>"
+
         obs_list += f"""
         <div style="margin: 15px 0; padding: 15px; background-color: #fff3cd; border-left: 4px solid #ff6b6b;">
             <p style="margin: 5px 0;"><strong>Species:</strong> {obs['species_name']} (<em>{obs['taxon_name']}</em>)</p>
             <p style="margin: 5px 0;"><strong>Observed:</strong> {obs['observed_on']}</p>
             <p style="margin: 5px 0;"><strong>Quality:</strong> {obs['quality_grade']}</p>
+            {site_html}
             {f"<p style='margin: 5px 0;'><strong>Phenology:</strong> {obs['flowers_fruits']}</p>" if obs['flowers_fruits'] else ""}
             {f"<p style='margin: 5px 0;'><strong>Notes:</strong> {obs['description']}</p>" if obs['description'] else ""}
             <p style="margin: 10px 0 5px 0;"><a href="{obs['observation_url']}" style="background-color: #4CAF50; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px; display: inline-block;">View on iNaturalist</a></p>

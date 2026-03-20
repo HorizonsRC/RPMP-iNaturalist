@@ -339,7 +339,7 @@ taxon_name_to_common = {
     "Araujia hortorum":"Moth Plant","Araujia sericifera":"Moth Plant","Clematis vitalba":"Old Man's Beard",
     "Pinus contorta":"Pest Conifers","Pinus uncinata":"Pest Conifers","Pinus mugo":"Pest Conifers","Pinus sylvestris":"Pest Conifers",
     "Alternanthera philoxeroides":"Alligator Weed","Passiflora caerulea":"Blue Passionflower","Cobaea scandens":"Cathedral Bells",
-    "Gunnera tinctoria":"Gunnera","Gunnera manicata":"Gunnera","Pennisetum alopecuroides":"Chinese Pennisetum",
+    "Gunnera tinctoria":"Chilean Rhubarb","Gunnera manicata":"Chilean Rhubarb","Pennisetum alopecuroides":"Chinese Pennisetum",
     "Bomarea multiflora":"Climbing Alstroemeria","Celastrus orbiculatus":"Climbing Spindleberry","Impatiens glandulifera":"Himalayan Balsam",
     "Nasella neesiana":"Nassella Tussock","Nassella trichotoma":"Nassella Tussock","Nassella tenuissima":"Nassella Tussock",
     "Lythrum salicaria":"Purple Loosestrife","Homalanthus populifolius":"Queensland Poplar","Prunus serotina":"Rum Cherry",
@@ -539,6 +539,172 @@ except Exception as e:
     sys.exit(1)
 
 # ============================================================================
+# Spatial Join — Managed Pest Plant Sites
+# ============================================================================
+# Intersects Eradication and Progressive Containment observations against the
+# BioS Pest Plant Sites layer (active sites only, species-matched).
+# Adds is_in_site (Y/N) and BaseSiteID to both layers.
+# Exclusion gets is_in_site = 'N' and BaseSiteID = None by default.
+# ============================================================================
+
+logger.info("="*70 + "\nSPATIAL JOIN — MANAGED PEST PLANT SITES\n" + "="*70)
+
+PEST_PLANT_SITES_URL = "https://services1.arcgis.com/VuN78wcRdq1Oj69W/arcgis/rest/services/BioS_Pest_Plants_Sites/FeatureServer/0"
+SITE_BUFFER_METRES   = 10
+
+# Maps site speciesID code → iNat speciesName
+SITE_SPECIES_CODE_TO_INAT = {
+    "AFG": "African Feathergrass",
+    "ALW": "Alligator Weed",
+    "ARH": "Arrowhead",
+    "BPF": "Blue Passionflower",
+    "CAL": "Climbing Alstroemeria",
+    "CBS": "Cathedral Bells",
+    "CHR": "Chilean Rhubarb",
+    "CPS": "Chinese Pennisetum",
+    "CSB": "Climbing Spindleberry",
+    "HBA": "Himalayan Balsam",
+    "KNW": "Japanese Knotweed",
+    "NAS": "Nassella Tussock",
+    "PLS": "Purple Loosestrife",
+    "QPL": "Queensland Poplar",
+    "RCY": "Rum Cherry",
+    "SNT": "Senegal Tea",
+    "SPT": "Spartina",
+    "WNS": "Woolly Nightshade",
+    "BAP": "Banana Passionfruit",
+    "BSD": "Boneseed",
+    "CON": "Pest Conifers",
+    "DBY": "Darwin's Barberry",
+    "DMP": "Pest Conifers",
+    "EBT": "Evergreen Buckthorn",
+    "GWO": "Grey Willow",
+    "MPT": "Moth Plant",
+    "OMB": "Old Man's Beard",
+    "SCP": "Pest Conifers",
+}
+
+PROGRAMME_TO_PROJECT_TYPE = {
+    "Eradication":             "Eradication",
+    "Progressive Containment": "Progressive Containment - Mapped",
+}
+
+def fetch_pest_plant_sites_prod(layer_url, project_type_filter):
+    """
+    Fetch active BioS Pest Plant Sites using arcpy (authenticated via ArcGIS Pro).
+    Filters to activeSite = 'Y' and the given projectType.
+    Returns a GeoDataFrame in NZTM2000 (EPSG:2193), or None on failure.
+    """
+    try:
+        logger.info(f"  Fetching active sites for projectType = '{project_type_filter}'...")
+        where = f"projectType = '{project_type_filter}' AND activeSite = 'Y'"
+        rows = []
+        with arcpy.da.SearchCursor(layer_url, ["SHAPE@", "BaseSiteID", "specieID"], where_clause=where) as cursor:
+            for row in cursor:
+                shape, base_site_id, species_id = row
+                if shape is None:
+                    continue
+                try:
+                    wkb = bytes(shape.WKB)
+                    geom = shapely.wkb.loads(wkb)
+                    if not geom.is_valid:
+                        geom = geom.buffer(0)
+                    rows.append({
+                        "BaseSiteID":   base_site_id,
+                        "inat_species": SITE_SPECIES_CODE_TO_INAT.get(species_id),
+                        "geometry":     geom
+                    })
+                except Exception:
+                    continue
+
+        if not rows:
+            logger.warning(f"  ⚠ No valid features found for '{project_type_filter}'")
+            return None
+
+        sites_gdf = gpd.GeoDataFrame(rows, geometry="geometry", crs="EPSG:2193")
+        sites_gdf = sites_gdf[sites_gdf.geometry.is_valid & sites_gdf.geometry.notna()]
+        logger.info(f"  ✓ Fetched {len(sites_gdf)} active sites")
+        return sites_gdf
+
+    except Exception as e:
+        logger.error(f"  ✗ Error fetching pest plant sites: {e}\n{traceback.format_exc()}")
+        return None
+
+
+def add_site_fields_prod(obs_gdf, sites_gdf, programme_name):
+    """
+    Spatially intersect observations with pest plant sites (10m buffer).
+    Only matches where site speciesID maps to the same iNat speciesName
+    as the observation — prevents cross-species false matches.
+    Adds is_in_site ('Y'/'N') and BaseSiteID.
+    """
+    obs_gdf = obs_gdf.copy()
+    obs_gdf["is_in_site"] = "N"
+    obs_gdf["BaseSiteID"] = None
+
+    if sites_gdf is None or len(sites_gdf) == 0:
+        logger.warning(f"  ⚠ No sites available for {programme_name} — all set to is_in_site='N'")
+        return obs_gdf
+
+    if obs_gdf.crs != sites_gdf.crs:
+        obs_gdf = obs_gdf.to_crs(sites_gdf.crs)
+
+    sites_buffered = sites_gdf.copy()
+    sites_buffered["geometry"] = sites_gdf.geometry.buffer(SITE_BUFFER_METRES)
+
+    joined = gpd.sjoin(
+        obs_gdf[["speciesName", "geometry"]],
+        sites_buffered[["BaseSiteID", "inat_species", "geometry"]],
+        how="left",
+        predicate="within"
+    )
+
+    # Deduplicate — keep first match per observation
+    joined_deduped = joined[~joined.index.duplicated(keep="first")]
+
+    match_count = 0
+    for idx in joined_deduped.index:
+        site_species = joined_deduped.loc[idx, "inat_species"]
+        obs_species  = joined_deduped.loc[idx, "speciesName"]
+        base_id      = joined_deduped.loc[idx, "BaseSiteID"]
+
+        if pd.notna(base_id) and pd.notna(site_species) and site_species == obs_species:
+            obs_gdf.at[idx, "is_in_site"] = "Y"
+            obs_gdf.at[idx, "BaseSiteID"] = str(base_id)
+            match_count += 1
+
+    logger.info(f"  ✓ {programme_name}: {match_count}/{len(obs_gdf)} matched to an active managed site (species-matched, within {SITE_BUFFER_METRES}m)")
+    return obs_gdf
+
+
+try:
+    logger.info("\n[1/2] Eradication sites...")
+    erad_sites_gdf = fetch_pest_plant_sites_prod(PEST_PLANT_SITES_URL, PROGRAMME_TO_PROJECT_TYPE["Eradication"])
+    logger.info("\n[2/2] Progressive Containment sites...")
+    prog_sites_gdf = fetch_pest_plant_sites_prod(PEST_PLANT_SITES_URL, PROGRAMME_TO_PROJECT_TYPE["Progressive Containment"])
+
+    logger.info("\nApplying site intersection...")
+    gdf_eradication_joined  = add_site_fields_prod(gdf_eradication_joined,  erad_sites_gdf, "Eradication")
+    gdf_progressive_joined  = add_site_fields_prod(gdf_progressive_joined,  prog_sites_gdf, "Progressive Containment")
+
+    # Exclusion does not participate in site join — initialise fields as N/None
+    gdf_exclusion_joined["is_in_site"] = "N"
+    gdf_exclusion_joined["BaseSiteID"] = None
+
+    erad_in = (gdf_eradication_joined["is_in_site"] == "Y").sum()
+    prog_in = (gdf_progressive_joined["is_in_site"] == "Y").sum()
+    logger.info(f"\n✓ PEST PLANT SITES JOIN COMPLETE")
+    logger.info(f"  Eradication:             {erad_in}/{len(gdf_eradication_joined)} in an active managed site")
+    logger.info(f"  Progressive Containment: {prog_in}/{len(gdf_progressive_joined)} in an active managed site")
+
+except Exception as e:
+    logger.error(f"✗ Error in pest plant sites join: {e}\n{traceback.format_exc()}")
+    logger.warning("  Continuing without site fields — is_in_site and BaseSiteID will be empty")
+    for gdf_x in [gdf_eradication_joined, gdf_progressive_joined, gdf_exclusion_joined]:
+        gdf_x["is_in_site"] = "N"
+        gdf_x["BaseSiteID"] = None
+
+# ============================================================================
 # Export to GDB — output path from config, not hardcoded
 # ============================================================================
 logger.info("="*70 + "\nEXPORTING TO GEODATABASE\n" + "="*70)
@@ -564,7 +730,8 @@ def set_field_aliases(gdb_path, fc_name, alias_dict):
 field_aliases = {"observation_url":"iNaturalist Observation URL Link","taxon_name":"Taxon Name","place_guess":"Location",
     "programme":"RPMP Programme","observed_on":"Observation Date","user_login":"Observer User Name","Name":"Operator Name",
     "operatingArea":"Operating Area","SMU_Name":"SMU Name","Status_25_26":"Status 25-26",
-    "quality_grade":"Observation Quality Grade","flowers_fruits":"Flowers or Fruit","description":"Description"}
+    "quality_grade":"Observation Quality Grade","flowers_fruits":"Flowers or Fruit","description":"Description",
+    "is_in_site":"In Managed Site (Y/N)","BaseSiteID":"Managed Site ID (if applicable)"}
 
 try:
     for label, gdf_x, layer_name in [
@@ -631,7 +798,8 @@ if new_obs_ids:
                 "programme":row["programme"],"taxon_name":row["taxon_name"],"species_name":row.get("speciesName","Unknown"),
                 "observed_on":row["observed_on"],"operating_area":oa,"staff_member":staff,"latitude":row["latitude"],"longitude":row["longitude"],
                 "quality_grade":row["quality_grade"],"user_name":row["user_name"],"description":row.get("description",""),
-                "flowers_fruits":row.get("flowers_fruits",""),"photoURL_1":row.get("photoURL_1","")})
+                "flowers_fruits":row.get("flowers_fruits",""),"photoURL_1":row.get("photoURL_1",""),
+                "is_in_site":row.get("is_in_site","N"),"BaseSiteID":row.get("BaseSiteID",None)})
 
         notification_file = config.NOTIFICATION_FILE  # from config, not hardcoded
         try:

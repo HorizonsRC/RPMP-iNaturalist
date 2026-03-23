@@ -326,6 +326,9 @@ def build_payload(gdb: dict, log_info: dict, tracking: dict, agol_counts: dict |
                 "species_in_list": SPECIES_LIST_COUNTS.get(prog_key.replace("_", " "), 0),
                 "unique_observed": 0,
                 "smu_match_rate": None,
+                "in_managed_site": None,
+                "not_in_managed_site": None,
+                "gpnz_excluded": None,
                 "source": "agol_fallback" if agol_counts else "unavailable",
             }
 
@@ -373,11 +376,28 @@ def build_payload(gdb: dict, log_info: dict, tracking: dict, agol_counts: dict |
             except Exception:
                 pass
 
+        in_managed_site = None
+        not_in_managed_site = None
+        gpnz_excluded = None
+
+        if prog_key in ("Eradication", "Progressive Containment") and "is_in_site" in gdf.columns:
+            if prog_key == "Progressive Containment" and "Designation" in gdf.columns:
+                gpnz_mask = gdf["Designation"] == "GPNZ"
+                gpnz_excluded = int(gpnz_mask.sum())
+                gdf_work = gdf[~gpnz_mask]
+            else:
+                gdf_work = gdf
+            in_managed_site = int((gdf_work["is_in_site"] == "Y").sum())
+            not_in_managed_site = int((gdf_work["is_in_site"] == "N").sum())
+
         return {
             "count": int(len(gdf)),
             "species_in_list": sp_count,
             "unique_observed": unique,
             "smu_match_rate": smu_rate,
+            "in_managed_site": in_managed_site,
+            "not_in_managed_site": not_in_managed_site,
+            "gpnz_excluded": gpnz_excluded,
             "most_recent": most_recent,
             "species_breakdown": species_breakdown,
             "source": "gdb",

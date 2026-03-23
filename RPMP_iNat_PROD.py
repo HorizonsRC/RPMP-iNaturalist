@@ -160,7 +160,7 @@ logger.info("="*70 + "\nFETCHING OBSERVATIONS FROM iNATURALIST API\n" + "="*70)
 
 project_id = config.INAT_PROJECT_ID
 url = f"{API_BASE_URL}/observations"
-params = {"project_id": project_id, "per_page": 200, "page": 1, "order": "desc", "order_by": "created_at"}
+params = {"project_id": project_id, "per_page": 200, "page": 1, "order": "desc", "order_by": "created_at", "quality_grade": "any"}
 observations, page_count = [], 0
 
 try:

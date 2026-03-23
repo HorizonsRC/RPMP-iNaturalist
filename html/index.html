@@ -136,7 +136,6 @@ body { font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif; font-siz
           <div class="cat-nums">
             <div class="cat-num"><strong id="x-obs">—</strong>observations</div>
             <div class="cat-num"><strong id="x-sp">—</strong>species listed</div>
-            <div class="cat-num"><strong id="x-smu">—</strong>% SMU match</div>
           </div>
         </div>
         <div class="cat-footer excl"><span>Open dashboard</span><span>→</span></div>
@@ -152,7 +151,8 @@ body { font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif; font-siz
           <div class="cat-nums">
             <div class="cat-num"><strong id="e-obs">—</strong>observations</div>
             <div class="cat-num"><strong id="e-sp">—</strong>species listed</div>
-            <div class="cat-num"><strong id="e-smu">—</strong>% SMU match</div>
+            <div class="cat-num"><strong id="e-in-site">—</strong>in managed sites</div>
+            <div class="cat-num"><strong id="e-not-site">—</strong>not in managed sites</div>
           </div>
         </div>
         <div class="cat-footer erad"><span>Open dashboard</span><span>→</span></div>
@@ -168,7 +168,8 @@ body { font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif; font-siz
           <div class="cat-nums">
             <div class="cat-num"><strong id="p-obs">—</strong>observations</div>
             <div class="cat-num"><strong id="p-sp">—</strong>species listed</div>
-            <div class="cat-num"><strong id="p-smu">—</strong>% SMU match</div>
+            <div class="cat-num"><strong id="p-in-site">—</strong>in managed sites</div>
+            <div class="cat-num"><strong id="p-not-site">—</strong>not in managed sites<br><span style="font-size:10px;color:var(--faint)">(excl. GPNZ)</span></div>
           </div>
         </div>
         <div class="cat-footer prog"><span>Open dashboard</span><span>→</span></div>
@@ -226,9 +227,9 @@ async function load(){
   const tot=(data.categories.eradication?.species_in_list||0)+(data.categories.exclusion?.species_in_list||0)+(data.categories.progressive_containment?.species_in_list||0);
   document.getElementById('s-sp').textContent=fmt(tot);
   const e=data.categories.eradication,x=data.categories.exclusion,p=data.categories.progressive_containment;
-  document.getElementById('e-obs').textContent=fmt(e?.count);document.getElementById('e-sp').textContent=fmt(e?.species_in_list);document.getElementById('e-smu').textContent=pct(e?.smu_match_rate);
-  document.getElementById('x-obs').textContent=fmt(x?.count);document.getElementById('x-sp').textContent=fmt(x?.species_in_list);document.getElementById('x-smu').textContent=pct(x?.smu_match_rate);
-  document.getElementById('p-obs').textContent=fmt(p?.count);document.getElementById('p-sp').textContent=fmt(p?.species_in_list);document.getElementById('p-smu').textContent=pct(p?.smu_match_rate);
+  document.getElementById('e-obs').textContent=fmt(e?.count);document.getElementById('e-sp').textContent=fmt(e?.species_in_list);document.getElementById('e-in-site').textContent=fmt(e?.in_managed_site);document.getElementById('e-not-site').textContent=fmt(e?.not_in_managed_site);
+  document.getElementById('x-obs').textContent=fmt(x?.count);document.getElementById('x-sp').textContent=fmt(x?.species_in_list);
+  document.getElementById('p-obs').textContent=fmt(p?.count);document.getElementById('p-sp').textContent=fmt(p?.species_in_list);document.getElementById('p-in-site').textContent=fmt(p?.in_managed_site);document.getElementById('p-not-site').textContent=fmt(p?.not_in_managed_site);
   const obs=data.recent_observations||[];
   document.getElementById('feed-badge').textContent=fmt(obs.length)+' recent';
   document.getElementById('feed').innerHTML=obs.length===0

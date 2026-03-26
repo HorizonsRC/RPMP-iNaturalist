@@ -32,3 +32,6 @@ png/
 iNat API/
 Pest Plant Projects List NZ/
 RPMP_iNat_Dashboard/
+
+# --- Temporary data exports and analysis files ---
+uncategorized_observations_with_urls.csv

@@ -128,9 +128,9 @@ programme_species = {
         "names": ["Banana Passionfruit","Boneseed","Darwin's Barberry","Evergreen Buckthorn","Grey Willow","Moth Plant",
                   "Old Man's Beard","Lodgepole Pine","Mountain Pine","Scots Pine","Dwarf Mountain Pine",
                   "Passiflora tarminiana","Passiflora tripartita","Passiflora tarminiana × tripartita","Passiflora tripartita mollissima",
-                  "Clematis vitalba","Osteospermum moniliferum","Osteospermum moniliferum moniliferum","Elkea"],
-        "taxon_ids": [1442036,61400,75751,82856,168326,75499,67747,48934,135715,58722,135727,
-                      1442036,1442037,1442036,404420,412975,133171,133168,160697,61400,61400,600447,1442036]
+                  "Clematis vitalba","Osteospermum moniliferum","Osteospermum moniliferum moniliferum","Elkea", "Passiflora tripartita var. mollissima"],
+        "taxon_ids": [1442036,61400,75751,82856,168326,75499,67747,48934,135715,58722,135727, 879226,
+                      1442036,1442037,1442036,404420,412975,133171,133168,160697,61400,61400,600447,133169,78358]
     },
     "Eradication": {
         "names": ["Alligator Weed","Blue Passionflower","Cathedral Bells","Chilean Rhubarb","Giant Rhubarb","Chinese Pennisetum",
@@ -138,9 +138,9 @@ programme_species = {
                   "Serrated Tussock","Purple Loosestrife","Queensland Poplar","Black Cherry","Rum Cherry","Senegal Tea",
                   "Saltmarsh Cordgrass","Sporobolus alterniflorus × foliosus","Common Cordgrass","Small Cord-Grass",
                   "Dense-flowered Cord Grass","Townsend's Cord-Grass","Woolly Nightshade","Cobaea scandens",
-                  "Reynoutria japonica","Bomarea multiflora","Japanese Knotweed"],
+                  "Reynoutria japonica","Bomarea multiflora","Japanese knotweed", "Cup-and-saucer Vine"],
         "taxon_ids": [75386,51454,164333,77310,1432862,1030051,283354,64540,47892,165658,165660,165660,61321,369932,
-                      54834,54834,407490,772903,773011,772983,772998,772990,773009,133287,164333,430005,430005]
+                      54834,54834,407490,772903,773011,772983,772998,772990,773009,133287,164333,430005,914922,285911]
     },
     "Exclusion": {
         "names": ["African Feathergrass","California Bulrush","Chilean Needle Grass","Heath Rush","Humped Bladderwort",

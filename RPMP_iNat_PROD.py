@@ -205,7 +205,6 @@ for programme, species_data in programme_species.items():
     for tid in species_data["taxon_ids"]: taxon_to_programme[tid] = programme
     for name in species_data["names"]: name_to_programme[name.lower().strip()] = programme
 logger.info(f"Taxon ID lookup: {len(taxon_to_programme)} entries, Name lookup: {len(name_to_programme)} entries")
-logger.debug(f"Name lookup keys (first 20): {list(name_to_programme.keys())[:20]}")
 
 # ============================================================================
 # Build DataFrame
@@ -241,7 +240,7 @@ try:
             taxon_id = None
         programme = (taxon_to_programme.get(taxon_id) or
                      name_to_programme.get(taxon_name.lower().strip()) or
-                     name_to_programme.get(species_guess.lower().strip()) if species_guess else None)
+                     (name_to_programme.get(species_guess.lower().strip()) if species_guess else None))
 
         flowers_fruits = None
         for ann in obs.get("annotations", []):
@@ -292,11 +291,8 @@ uncategorized = df["programme"].isna().sum()
 logger.info(f"\nCategorized: {categorized} ({categorized/len(df)*100:.1f}%) | Uncategorized: {uncategorized}")
 if uncategorized > 0:
     logger.warning(f"⚠ {uncategorized} uncategorized observations:")
-    for _, row in df[df["programme"].isna()][["taxon_id","taxon_name","species_guess","id"]].drop_duplicates("taxon_name").iterrows():
-        logger.warning(f"  - ID: {row['id']}")
-        logger.warning(f"    taxon_id: {row['taxon_id']}")
-        logger.warning(f"    taxon_name: {repr(row['taxon_name'])}")
-        logger.warning(f"    species_guess: {repr(row['species_guess'])}")
+    for _, row in df[df["programme"].isna()][["taxon_name","species_guess","id"]].drop_duplicates("taxon_name").iterrows():
+        logger.warning(f"  - {row['taxon_name']} ({row['species_guess']}) ID: {row['id']}")
 
 # ============================================================================
 # Convert to GeoDataFrame and Reproject

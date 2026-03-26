@@ -125,7 +125,7 @@ logger.info("="*70 + "\nDEFINING PROGRAMME SPECIES LISTS\n" + "="*70)
 
 programme_species = {
     "Progressive Containment": {
-        "names": ["Banana Passionfruit","Boneseed","Darwin's Barberry","Evergreen Buckthorn","Grey Willow","Moth Plant",
+        "names": ["Banana Passionfruit","Boneseed","Darwin's Barberry","Evergreen Buckthorn","Rhamnus alaternus","Grey Willow","Salix cinerea","Moth Plant",
                   "Old Man's Beard","Lodgepole Pine","Mountain Pine","Scots Pine","Dwarf Mountain Pine",
                   "Passiflora tarminiana","Passiflora tripartita","Passiflora tarminiana × tripartita","Passiflora tripartita mollissima",
                   "Clematis vitalba","Osteospermum moniliferum","Osteospermum moniliferum moniliferum","Elkea", "Passiflora tripartita var. mollissima"],
@@ -135,7 +135,7 @@ programme_species = {
     "Eradication": {
         "names": ["Alligator Weed","Blue Passionflower","Cathedral Bells","Chilean Rhubarb","Giant Rhubarb","Chinese Pennisetum",
                   "Climbing Alstroemeria","Climbing Spindleberry","Himalayan Balsam","Chilean Needle Grass","Mexican Feathergrass",
-                  "Serrated Tussock","Purple Loosestrife","Queensland Poplar","Black Cherry","Rum Cherry","Senegal Tea",
+                  "Serrated Tussock","Purple Loosestrife","Queensland Poplar","Homalanthus populifolius","Black Cherry","Rum Cherry","Senegal Tea",
                   "Saltmarsh Cordgrass","Sporobolus alterniflorus × foliosus","Common Cordgrass","Small Cord-Grass",
                   "Dense-flowered Cord Grass","Townsend's Cord-Grass","Woolly Nightshade","Cobaea scandens",
                   "Reynoutria japonica","Bomarea multiflora","Japanese knotweed", "Cup-and-saucer Vine"],
@@ -205,6 +205,7 @@ for programme, species_data in programme_species.items():
     for tid in species_data["taxon_ids"]: taxon_to_programme[tid] = programme
     for name in species_data["names"]: name_to_programme[name.lower().strip()] = programme
 logger.info(f"Taxon ID lookup: {len(taxon_to_programme)} entries, Name lookup: {len(name_to_programme)} entries")
+logger.debug(f"Name lookup keys (first 20): {list(name_to_programme.keys())[:20]}")
 
 # ============================================================================
 # Build DataFrame
@@ -233,6 +234,11 @@ try:
         of_dict = {f.get("name") or f.get("field_id"): f.get("value") for f in (obs.get("observation_fields") or [])}
         taxon = obs.get("taxon", {})
         taxon_id, taxon_name, species_guess = taxon.get("id"), taxon.get("name",""), obs.get("species_guess","")
+        # Ensure taxon_id is int for lookup (API may return as string or float)
+        try:
+            taxon_id = int(taxon_id) if taxon_id is not None else None
+        except (ValueError, TypeError):
+            taxon_id = None
         programme = (taxon_to_programme.get(taxon_id) or
                      name_to_programme.get(taxon_name.lower().strip()) or
                      name_to_programme.get(species_guess.lower().strip()) if species_guess else None)
@@ -286,8 +292,11 @@ uncategorized = df["programme"].isna().sum()
 logger.info(f"\nCategorized: {categorized} ({categorized/len(df)*100:.1f}%) | Uncategorized: {uncategorized}")
 if uncategorized > 0:
     logger.warning(f"⚠ {uncategorized} uncategorized observations:")
-    for _, row in df[df["programme"].isna()][["taxon_name","species_guess","id"]].drop_duplicates("taxon_name").iterrows():
-        logger.warning(f"  - {row['taxon_name']} ({row['species_guess']}) ID: {row['id']}")
+    for _, row in df[df["programme"].isna()][["taxon_id","taxon_name","species_guess","id"]].drop_duplicates("taxon_name").iterrows():
+        logger.warning(f"  - ID: {row['id']}")
+        logger.warning(f"    taxon_id: {row['taxon_id']}")
+        logger.warning(f"    taxon_name: {repr(row['taxon_name'])}")
+        logger.warning(f"    species_guess: {repr(row['species_guess'])}")
 
 # ============================================================================
 # Convert to GeoDataFrame and Reproject

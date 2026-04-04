@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-03T16:10:24Z",
+  "last_updated": "2026-04-04T04:15:25Z",
   "total_observations": 523,
   "new_observations": 0,
   "date_breakdown": {
@@ -167,7 +167,7 @@
     "agol_status": "success",
     "email_status": "none needed",
     "last_pipeline_run": null,
-    "log_file": "iNat_Pipeline_20260404_050023.log",
+    "log_file": "iNat_Pipeline_20260404_170522.log",
     "agol_live_counts": {
       "iNat_Exclusion": 3,
       "iNat_Eradication": 138,

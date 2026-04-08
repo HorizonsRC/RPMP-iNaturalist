@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-04-07T17:10:27Z",
-  "total_observations": 524,
+  "last_updated": "2026-04-08T05:15:24Z",
+  "total_observations": 525,
   "new_observations": 0,
   "date_breakdown": {
-    "last_7_days": 1,
+    "last_7_days": 2,
     "last_30_days": 10,
     "last_3_months": 21,
     "last_year": 65,
@@ -114,22 +114,22 @@
       "source": "gdb"
     },
     "progressive_containment": {
-      "count": 383,
+      "count": 384,
       "species_in_list": 23,
       "unique_observed": 8,
       "smu_match_rate": 69.5,
       "in_managed_site": 40,
-      "not_in_managed_site": 343,
+      "not_in_managed_site": 344,
       "gpnz_excluded": 0,
       "most_recent": {
-        "date": "2026-04-06",
-        "species": "Grey Willow",
-        "location": "Ohura"
+        "date": "2026-04-08",
+        "species": "Old Man's Beard",
+        "location": "Taihape"
       },
       "species_breakdown": [
         {
           "species": "Old Man's Beard",
-          "count": 177
+          "count": 178
         },
         {
           "species": "Banana Passionfruit",
@@ -164,21 +164,26 @@
     }
   },
   "system": {
-    "agol_status": "unknown",
+    "agol_status": "success",
     "email_status": "none needed",
     "last_pipeline_run": null,
-    "log_file": "iNat_Pipeline_20260408_050026.log",
+    "log_file": "iNat_Pipeline_20260408_170524.log",
     "agol_live_counts": {
-      "iNat_Exclusion": 0,
+      "iNat_Exclusion": 3,
       "iNat_Eradication": 138,
-      "iNat_ProgressiveContainment": 383,
-      "iNat_AllProgrammes": 524
+      "iNat_ProgressiveContainment": 384,
+      "iNat_AllProgrammes": 525
     }
   },
-  "warnings": [
-    "Exclusion: GDB has 3 features, AGOL has 0 \u2014 possible sync issue"
-  ],
+  "warnings": [],
   "recent_observations": [
+    {
+      "species": "Old Man's Beard",
+      "category": "Progressive Containment",
+      "location": "Taihape",
+      "observed_on": "2026-04-08",
+      "id": 348188121
+    },
     {
       "species": "Grey Willow",
       "category": "Progressive Containment",
@@ -304,13 +309,6 @@
       "location": "Horowhenua",
       "observed_on": "2026-02-19",
       "id": 339507837
-    },
-    {
-      "species": "Purple Loosestrife",
-      "category": "Eradication",
-      "location": "Horowhenua",
-      "observed_on": "2026-02-10",
-      "id": 338357798
     },
     {
       "species": "Old Man's Beard",

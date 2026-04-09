@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-08T17:10:24Z",
+  "last_updated": "2026-04-09T05:15:24Z",
   "total_observations": 525,
   "new_observations": 0,
   "date_breakdown": {
@@ -21,64 +21,64 @@
       "gpnz_excluded": null,
       "most_recent": {
         "date": "2026-03-16",
-        "species": "Woolly Nightshade",
+        "species": "WNS",
         "location": "Palmerston North"
       },
       "species_breakdown": [
         {
-          "species": "Woolly Nightshade",
+          "species": "WNS",
           "count": 53
         },
         {
-          "species": "Purple Loosestrife",
+          "species": "PLS",
           "count": 33
         },
         {
-          "species": "Chilean Rhubarb",
+          "species": "CHR",
           "count": 12
         },
         {
-          "species": "Cathedral Bells",
+          "species": "CBS",
           "count": 12
         },
         {
-          "species": "Queensland Poplar",
+          "species": "QPL",
           "count": 7
         },
         {
-          "species": "Himalayan Balsam",
+          "species": "HBA",
           "count": 5
         },
         {
-          "species": "Blue Passionflower",
+          "species": "BPF",
           "count": 4
         },
         {
-          "species": "Spartina",
+          "species": "SPT",
           "count": 3
         },
         {
-          "species": "Climbing Spindleberry",
+          "species": "CSB",
           "count": 2
         },
         {
-          "species": "Climbing Alstroemeria",
+          "species": "CAL",
           "count": 2
         },
         {
-          "species": "Alligator Weed",
+          "species": "ALW",
           "count": 2
         },
         {
-          "species": "Japanese Knotweed",
+          "species": "KNW",
           "count": 1
         },
         {
-          "species": "Nassella Tussock",
+          "species": "NAS",
           "count": 1
         },
         {
-          "species": "Rum Cherry",
+          "species": "RCY",
           "count": 1
         }
       ],
@@ -94,20 +94,20 @@
       "gpnz_excluded": null,
       "most_recent": {
         "date": "2021-04-22",
-        "species": "Humped Bladderwort",
+        "species": "BLW",
         "location": "Ohura"
       },
       "species_breakdown": [
         {
-          "species": "Sweet Pittosporum",
+          "species": "SWP",
           "count": 1
         },
         {
-          "species": "Humped Bladderwort",
+          "species": "BLW",
           "count": 1
         },
         {
-          "species": "Arrowhead",
+          "species": "ARH",
           "count": 1
         }
       ],
@@ -116,58 +116,62 @@
     "progressive_containment": {
       "count": 384,
       "species_in_list": 23,
-      "unique_observed": 8,
+      "unique_observed": 9,
       "smu_match_rate": 69.5,
       "in_managed_site": 40,
       "not_in_managed_site": 344,
       "gpnz_excluded": 0,
       "most_recent": {
         "date": "2026-04-08",
-        "species": "Old Man's Beard",
+        "species": "OMB",
         "location": "Taihape"
       },
       "species_breakdown": [
         {
-          "species": "Old Man's Beard",
+          "species": "OMB",
           "count": 178
         },
         {
-          "species": "Banana Passionfruit",
+          "species": "BAP",
           "count": 86
         },
         {
-          "species": "Boneseed",
+          "species": "BSD",
           "count": 37
         },
         {
-          "species": "Grey Willow",
+          "species": "GWO",
           "count": 24
         },
         {
-          "species": "Darwin's Barberry",
+          "species": "DBY",
           "count": 19
         },
         {
-          "species": "Pest Conifers",
+          "species": "EBT",
           "count": 16
         },
         {
-          "species": "Evergreen Buckthorn",
-          "count": 16
+          "species": "CON",
+          "count": 14
         },
         {
-          "species": "Moth Plant",
+          "species": "MPT",
           "count": 8
+        },
+        {
+          "species": "SCP",
+          "count": 2
         }
       ],
       "source": "gdb"
     }
   },
   "system": {
-    "agol_status": "success",
-    "email_status": "none needed",
+    "agol_status": "unknown",
+    "email_status": "unknown",
     "last_pipeline_run": null,
-    "log_file": "iNat_Pipeline_20260409_050027.log",
+    "log_file": "iNat_Pipeline_20260409_170522.log",
     "agol_live_counts": {
       "iNat_Exclusion": 3,
       "iNat_Eradication": 138,
@@ -178,140 +182,140 @@
   "warnings": [],
   "recent_observations": [
     {
-      "species": "Old Man's Beard",
+      "species": "OMB",
       "category": "Progressive Containment",
       "location": "Taihape",
       "observed_on": "2026-04-08",
       "id": 348188121
     },
     {
-      "species": "Grey Willow",
+      "species": "GWO",
       "category": "Progressive Containment",
-      "location": "Ohura",
+      "location": "",
       "observed_on": "2026-04-06",
       "id": 347744678
     },
     {
-      "species": "Banana Passionfruit",
+      "species": "BAP",
       "category": "Progressive Containment",
       "location": "Horowhenua",
       "observed_on": "2026-03-28",
       "id": 345624198
     },
     {
-      "species": "Old Man's Beard",
+      "species": "OMB",
       "category": "Progressive Containment",
       "location": "Whanganui",
       "observed_on": "2026-03-22",
       "id": 344349306
     },
     {
-      "species": "Old Man's Beard",
+      "species": "OMB",
       "category": "Progressive Containment",
       "location": "Palmerston North",
       "observed_on": "2026-03-21",
       "id": 344104863
     },
     {
-      "species": "Old Man's Beard",
+      "species": "OMB",
       "category": "Progressive Containment",
       "location": "Palmerston North",
       "observed_on": "2026-03-21",
       "id": 344097006
     },
     {
-      "species": "Old Man's Beard",
+      "species": "OMB",
       "category": "Progressive Containment",
       "location": "Palmerston North",
       "observed_on": "2026-03-21",
       "id": 344065706
     },
     {
-      "species": "Woolly Nightshade",
+      "species": "WNS",
       "category": "Eradication",
       "location": "Palmerston North",
       "observed_on": "2026-03-16",
       "id": 343225422
     },
     {
-      "species": "Chilean Rhubarb",
+      "species": "CHR",
       "category": "Eradication",
       "location": "Palmerston North",
       "observed_on": "2026-03-15",
       "id": 343040301
     },
     {
-      "species": "Old Man's Beard",
+      "species": "OMB",
       "category": "Progressive Containment",
       "location": "Taihape",
       "observed_on": "2026-03-13",
       "id": 342669254
     },
     {
-      "species": "Moth Plant",
+      "species": "MPT",
       "category": "Progressive Containment",
       "location": "Whanganui",
       "observed_on": "2026-03-12",
       "id": 343067581
     },
     {
-      "species": "Old Man's Beard",
+      "species": "OMB",
       "category": "Progressive Containment",
       "location": "Whanganui",
       "observed_on": "2026-03-10",
       "id": 342153773
     },
     {
-      "species": "Old Man's Beard",
+      "species": "OMB",
       "category": "Progressive Containment",
       "location": "Palmerston North",
       "observed_on": "2026-03-05",
       "id": 341340897
     },
     {
-      "species": "Grey Willow",
+      "species": "GWO",
       "category": "Progressive Containment",
-      "location": "Tararua",
+      "location": "",
       "observed_on": "2026-03-05",
       "id": 341430523
     },
     {
-      "species": "Pest Conifers",
+      "species": "CON",
       "category": "Progressive Containment",
       "location": "Tongariro",
       "observed_on": "2026-03-05",
       "id": 341355234
     },
     {
-      "species": "Moth Plant",
+      "species": "MPT",
       "category": "Progressive Containment",
       "location": "Whanganui",
       "observed_on": "2026-02-26",
       "id": 340372755
     },
     {
-      "species": "Old Man's Beard",
+      "species": "OMB",
       "category": "Progressive Containment",
       "location": "Palmerston North",
       "observed_on": "2026-02-25",
       "id": 340201582
     },
     {
-      "species": "Evergreen Buckthorn",
+      "species": "EBT",
       "category": "Progressive Containment",
-      "location": "Whanganui",
+      "location": "",
       "observed_on": "2026-02-20",
       "id": 339345918
     },
     {
-      "species": "Woolly Nightshade",
+      "species": "WNS",
       "category": "Eradication",
       "location": "Horowhenua",
       "observed_on": "2026-02-19",
       "id": 339507837
     },
     {
-      "species": "Old Man's Beard",
+      "species": "OMB",
       "category": "Progressive Containment",
       "location": "Tararua",
       "observed_on": "2026-02-10",

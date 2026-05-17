@@ -30,6 +30,8 @@ RPMP-iNaturalist/
 ├── RPMP_iNat.ipynb              # Interactive notebook version — use for setup, testing, and token generation
 ├── iNat_Dashboard_Export.py     # Dashboard JSON updater — runs after main pipeline
 ├── inat_email_notifications.py  # Email alert module — called by the main pipeline
+├── resend_notifications.py      # Backup script — manually resend staff alerts after a pipeline failure
+├── extract_uncategorized.py     # Utility — list iNat obs not matched to any RPMP programme
 │
 ├── html/
 │   └── [embedded HTML files]    # HTML widgets embedded in the AGOL ExB dashboard
@@ -127,6 +129,43 @@ The token is saved to the path set in `config.py` (`INAT_TOKEN_FILE`) and reused
 **Email recipients** are configured in `config.py` via `STAFF_EMAILS` and `AREA_TO_STAFF` — kept out of GitHub because they contain internal staff details.
 
 **Testing mode:** Set `TESTING_MODE = True` at the top of the script to redirect all emails to a test address without notifying real staff.
+
+---
+
+### `resend_notifications.py` — Backup Script (Manual)
+
+**What it does:**
+- Manually re-sends Eradication / Exclusion alert emails when the main
+  pipeline failed to send them
+- Pulls from the same AGOL hosted layers and uses the same email template
+  as the main pipeline — staff get an identical-looking alert
+- Two filtering modes:
+  - Default: filter AGOL features by `observed_on` within the past N days
+  - `--by-upload-date`: query iNat directly for observations *uploaded*
+    in the past N days, then intersect with AGOL to pick up staff
+    assignment. Use this when catching up after a known pipeline failure
+- Defaults to dry-run — only sends when `--send` is passed
+
+**When to use it:**
+- The scheduled run failed and you need to backfill notifications
+- Verifying which staff would have been pinged for a given window
+
+**Full usage:** see [`RESEND_NOTIFICATIONS_README.md`](RESEND_NOTIFICATIONS_README.md).
+
+---
+
+### `extract_uncategorized.py` — Diagnostic Utility
+
+**What it does:**
+- Lists iNaturalist observations in the Horizons project whose taxon ID
+  doesn't match any RPMP programme species list
+- Writes two CSVs (`uncategorized_observations.csv` and
+  `uncategorized_observations_with_urls.csv`) to the current directory
+- Useful for spotting new species or taxon IDs that should be added to
+  the programme lists in `RPMP_iNat_PROD.py`
+
+**When to use it:** Run manually whenever the main pipeline log reports
+uncategorised observations, or as a periodic audit.
 
 ---
 

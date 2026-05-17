@@ -16,15 +16,28 @@ Logs/
 __pycache__/
 *.py[cod]
 *.pyo
- 
+
+# --- Jupyter notebook checkpoints (auto-generated) ---
+.ipynb_checkpoints/
+
+# --- IDE / editor workspace files (machine-specific) ---
+VS-code-workspace/
+*.code-workspace
+
+# --- Local output from extract_uncategorized.py ---
+uncategorized_observations*.csv
+
+# --- HTML design previews / work-in-progress (don't publish via Pages) ---
+html/*_preview.html
+
 # --- OS junk files ---
 .DS_Store
 Thumbs.db
- 
+
 # --- Virtual environment (if you ever create one) ---
 venv/
 .env
- 
+
 # --- Local working folders (not part of the repo) ---
 Archive/
 Temp/

@@ -336,25 +336,25 @@ taxon_name_to_smu = {
 }
 
 taxon_name_to_common = {
-    "Passiflora tripartita":"Banana Passionfruit","Passiflora tarminiana":"Banana Passionfruit",
-    "Passiflora tripartita mollissima":"Banana Passionfruit","Passiflora tripartita azuayensis":"Banana Passionfruit",
-    "Elkea":"Banana Passionfruit","Tacsonia":"Banana Passionfruit",
-    "Osteospermum moniliferum":"Boneseed","Osteospermum moniliferum moniliferum":"Boneseed",
-    "Berberis darwinii":"Darwin's Barberry","Rhamnus alaternus":"Evergreen Buckthorn","Salix cinerea":"Grey Willow",
-    "Araujia hortorum":"Moth Plant","Araujia sericifera":"Moth Plant","Clematis vitalba":"Old Man's Beard",
-    "Pinus contorta":"Pest Conifers","Pinus uncinata":"Pest Conifers","Pinus mugo":"Pest Conifers","Pinus sylvestris":"Pest Conifers",
-    "Alternanthera philoxeroides":"Alligator Weed","Passiflora caerulea":"Blue Passionflower","Cobaea scandens":"Cathedral Bells",
-    "Gunnera tinctoria":"Chilean Rhubarb","Gunnera manicata":"Chilean Rhubarb","Pennisetum alopecuroides":"Chinese Pennisetum",
-    "Bomarea multiflora":"Climbing Alstroemeria","Celastrus orbiculatus":"Climbing Spindleberry","Impatiens glandulifera":"Himalayan Balsam",
-    "Nasella neesiana":"Nassella Tussock","Nassella trichotoma":"Nassella Tussock","Nassella tenuissima":"Nassella Tussock",
-    "Lythrum salicaria":"Purple Loosestrife","Homalanthus populifolius":"Queensland Poplar","Prunus serotina":"Rum Cherry",
-    "Gymnocoronis spilanthoides":"Senegal Tea","Spartina alterniflora":"Spartina","Spartina anglica":"Spartina",
-    "Sporobolus anglicus":"Spartina","Sporobolus × townsendii":"Spartina","Spartina densiflora":"Spartina","Spartina maritima":"Spartina","Spartina patens":"Spartina",
-    "Solanum mauritianum":"Woolly Nightshade","Reynoutria japonica":"Japanese Knotweed","Fallopia japonica":"Japanese Knotweed",
-    "Pennisetum macrourum":"African Feathergrass","Sagittaria platyphylla":"Arrowhead","Sagittaria montevidensis":"Arrowhead",
-    "Bolboschoenus robustus":"California Bulrush","Juncus squarrosus":"Heath Rush","Utricularia gibba":"Humped Bladderwort",
-    "Zizania latifolia":"Manchurian Wild Rice","Xanthium occidentale":"Noogoora Burr","Phragmites australis":"Common Reed",
-    "Carthamus lanatus":"Saffron Thistle","Pittosporum undulatum":"Sweet Pittosporum","Hieracium lepidulum":"Tussock Hawkweed",
+    "Passiflora tripartita":"BAP","Passiflora tarminiana":"BAP",
+    "Passiflora tripartita mollissima":"BAP","Passiflora tripartita azuayensis":"BAP",
+    "Elkea":"BAP","Tacsonia":"BAP",
+    "Osteospermum moniliferum":"BSD","Osteospermum moniliferum moniliferum":"BSD",
+    "Berberis darwinii":"DBY","Rhamnus alaternus":"EBT","Salix cinerea":"GWO",
+    "Araujia hortorum":"MPT","Araujia sericifera":"MPT","Clematis vitalba":"OMB",
+    "Pinus contorta":"CON","Pinus uncinata":"DMP","Pinus mugo":"MTP","Pinus sylvestris":"SCP",
+    "Alternanthera philoxeroides":"ALW","Passiflora caerulea":"BPF","Cobaea scandens":"CBS",
+    "Gunnera tinctoria":"CHR","Gunnera manicata":"CHR","Pennisetum alopecuroides":"CPS",
+    "Bomarea multiflora":"CAL","Celastrus orbiculatus":"CSB","Impatiens glandulifera":"HBA",
+    "Nasella neesiana":"NAS","Nassella trichotoma":"NAS","Nassella tenuissima":"NAS",
+    "Lythrum salicaria":"PLS","Homalanthus populifolius":"QPL","Prunus serotina":"RCY",
+    "Gymnocoronis spilanthoides":"SNT","Spartina alterniflora":"SPT","Spartina anglica":"SPT",
+    "Sporobolus anglicus":"SPT","Sporobolus × townsendii":"SPT","Spartina densiflora":"SPT","Spartina maritima":"SPT","Spartina patens":"SPT",
+    "Solanum mauritianum":"WNS","Reynoutria japonica":"KNW","Fallopia japonica":"KNW",
+    "Pennisetum macrourum":"AFG","Sagittaria platyphylla":"ARH","Sagittaria montevidensis":"ARH",
+    "Bolboschoenus robustus":"CBR","Juncus squarrosus":"HER","Utricularia gibba":"BLW",
+    "Zizania latifolia":"MWR","Xanthium occidentale":"NOG","Phragmites australis":"PHG",
+    "Carthamus lanatus":"SFT","Pittosporum undulatum":"SWP","Hieracium lepidulum":"THW",
 }
 
 # ============================================================================
@@ -557,36 +557,12 @@ logger.info("="*70 + "\nSPATIAL JOIN — MANAGED PEST PLANT SITES\n" + "="*70)
 PEST_PLANT_SITES_URL = "https://services1.arcgis.com/VuN78wcRdq1Oj69W/arcgis/rest/services/BioS_Pest_Plants_Sites/FeatureServer/0"
 SITE_BUFFER_METRES   = 10
 
-# Maps site speciesID code → iNat speciesName
-SITE_SPECIES_CODE_TO_INAT = {
-    "AFG": "African Feathergrass",
-    "ALW": "Alligator Weed",
-    "ARH": "Arrowhead",
-    "BPF": "Blue Passionflower",
-    "CAL": "Climbing Alstroemeria",
-    "CBS": "Cathedral Bells",
-    "CHR": "Chilean Rhubarb",
-    "CPS": "Chinese Pennisetum",
-    "CSB": "Climbing Spindleberry",
-    "HBA": "Himalayan Balsam",
-    "KNW": "Japanese Knotweed",
-    "NAS": "Nassella Tussock",
-    "PLS": "Purple Loosestrife",
-    "QPL": "Queensland Poplar",
-    "RCY": "Rum Cherry",
-    "SNT": "Senegal Tea",
-    "SPT": "Spartina",
-    "WNS": "Woolly Nightshade",
-    "BAP": "Banana Passionfruit",
-    "BSD": "Boneseed",
-    "CON": "Pest Conifers",
-    "DBY": "Darwin's Barberry",
-    "DMP": "Pest Conifers",
-    "EBT": "Evergreen Buckthorn",
-    "GWO": "Grey Willow",
-    "MPT": "Moth Plant",
-    "OMB": "Old Man's Beard",
-    "SCP": "Pest Conifers",
+# speciesName now stores domain codes (e.g. "CBS", "CHR") matching the BioS
+# SpeciesNames domain — inat_species is just the code itself for matching.
+SITE_SPECIES_CODES = {
+    "AFG", "ALW", "ARH", "BPF", "CAL", "CBS", "CHR", "CPS", "CSB", "HBA",
+    "KNW", "NAS", "PLS", "QPL", "RCY", "SNT", "SPT", "WNS", "BAP", "BSD",
+    "CON", "DBY", "DMP", "EBT", "GWO", "MPT", "OMB", "SCP",
 }
 
 PROGRAMME_TO_PROJECT_TYPE = {
@@ -616,7 +592,7 @@ def fetch_pest_plant_sites_prod(layer_url, project_type_filter):
                         geom = geom.buffer(0)
                     rows.append({
                         "BaseSiteID":   base_site_id,
-                        "inat_species": SITE_SPECIES_CODE_TO_INAT.get(species_id),
+                        "inat_species": species_id,
                         "geometry":     geom
                     })
                 except Exception:
@@ -639,8 +615,8 @@ def fetch_pest_plant_sites_prod(layer_url, project_type_filter):
 def add_site_fields_prod(obs_gdf, sites_gdf, programme_name):
     """
     Spatially intersect observations with pest plant sites (10m buffer).
-    Only matches where site speciesID maps to the same iNat speciesName
-    as the observation — prevents cross-species false matches.
+    Only matches where site specieID code matches the iNat speciesName code
+    — prevents cross-species false matches.
     Adds is_in_site ('Y'/'N') and BaseSiteID.
     """
     obs_gdf = obs_gdf.copy()
@@ -893,28 +869,7 @@ def update_hosted_service(item_id, gdb_path, temp_pc_path=None):
     except Exception as e:
         logger.error(f"✗ Critical AGOL error: {e}\n{traceback.format_exc()}"); return False
 
-# ============================================================================
-# Send Alert Emails (Before AGOL Update)
-# ============================================================================
-logger.info("="*70 + "\nSENDING ALERT EMAILS (Pre-AGOL)\n" + "="*70)
 email_success = False
-try:
-    nf = config.NOTIFICATION_FILE
-    if os.path.exists(nf):
-        with open(nf,"r") as f: notif_data = json.load(f)
-        if notif_data.get("total_notifications",0) > 0:
-            from inat_email_notifications import send_eradication_exclusion_alert
-            staff_notifs = {}
-            for n in notif_data.get("notifications",[]): staff_notifs.setdefault(n.get("staff_member","Unassigned"),[]).append(n)
-            sent = 0
-            for sn, notifs in staff_notifs.items():
-                try:
-                    if send_eradication_exclusion_alert(notifs, inat_email_notifications.STAFF_EMAILS.get(sn)): sent += len(notifs); logger.info(f"  ✓ Sent {len(notifs)} to {sn}")
-                    else: logger.warning(f"  ⚠ Failed to send to {sn}")
-                except Exception as e: logger.error(f"  ✗ Error sending to {sn}: {e}")
-            if sent: email_success = True; logger.info(f"✓ {sent} alert email(s) sent")
-    else: logger.info("  No pending notifications")
-except Exception as e: logger.error(f"✗ Alert email error: {e}\n{traceback.format_exc()}")
 
 # ============================================================================
 # AGOL Update
@@ -952,8 +907,12 @@ try:
         logger.info(f"✓ Processed: {results['notifications_processed']}, Sent: {results['emails_sent']}, Failed: {results.get('emails_failed',0)}")
         if results.get("staff_notifications"):
             for sn, ei in results["staff_notifications"].items(): logger.info(f"  {sn} ({ei['email']}): {ei['count']} obs")
+        # success = no priority notifications to send, OR all sends succeeded
+        if results["notifications_processed"] == 0 or results.get("emails_failed", 0) == 0:
+            email_success = True
     else:
         logger.info("No pending notifications"); results = {"notifications_processed":0,"emails_sent":0,"emails_failed":0}
+        email_success = True  # nothing to send is not a failure
 except ImportError as e:
     logger.error(f"✗ Could not import email module: {e}"); results = {"notifications_processed":0,"emails_sent":0,"emails_failed":0}
 except Exception as e:

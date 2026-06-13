@@ -1,12 +1,12 @@
 {
-  "last_updated": "2026-06-13T05:15:23Z",
-  "total_observations": 537,
+  "last_updated": "2026-06-13T17:10:23Z",
+  "total_observations": 538,
   "new_observations": 0,
   "date_breakdown": {
-    "last_7_days": 0,
+    "last_7_days": 1,
     "last_30_days": 1,
-    "last_3_months": 19,
-    "last_year": 69,
+    "last_3_months": 18,
+    "last_year": 70,
     "older_than_1_year": 443,
     "unknown": 5
   },
@@ -114,22 +114,22 @@
       "source": "gdb"
     },
     "progressive_containment": {
-      "count": 394,
+      "count": 395,
       "species_in_list": 23,
       "unique_observed": 9,
-      "smu_match_rate": 69.3,
+      "smu_match_rate": 69.4,
       "in_managed_site": 42,
-      "not_in_managed_site": 352,
+      "not_in_managed_site": 353,
       "gpnz_excluded": 0,
       "most_recent": {
-        "date": "2026-05-21",
-        "species": "BAP",
-        "location": "Palmerston North"
+        "date": "2026-06-13",
+        "species": "OMB",
+        "location": "Tararua"
       },
       "species_breakdown": [
         {
           "species": "OMB",
-          "count": 178
+          "count": 179
         },
         {
           "species": "BAP",
@@ -171,16 +171,23 @@
     "agol_status": "success",
     "email_status": "none needed",
     "last_pipeline_run": null,
-    "log_file": "iNat_Pipeline_20260613_170523.log",
+    "log_file": "iNat_Pipeline_20260614_050021.log",
     "agol_live_counts": {
       "iNat_Exclusion": 3,
       "iNat_Eradication": 140,
-      "iNat_ProgressiveContainment": 394,
-      "iNat_AllProgrammes": 537
+      "iNat_ProgressiveContainment": 395,
+      "iNat_AllProgrammes": 538
     }
   },
   "warnings": [],
   "recent_observations": [
+    {
+      "species": "OMB",
+      "category": "Progressive Containment",
+      "location": "Tararua",
+      "observed_on": "2026-06-13",
+      "id": 371138140
+    },
     {
       "species": "BAP",
       "category": "Progressive Containment",
@@ -313,13 +320,6 @@
       "location": "Palmerston North",
       "observed_on": "2026-03-16",
       "id": 343225422
-    },
-    {
-      "species": "CHR",
-      "category": "Eradication",
-      "location": "Palmerston North",
-      "observed_on": "2026-03-15",
-      "id": 343040301
     }
   ]
 }

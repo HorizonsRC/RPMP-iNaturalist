@@ -57,9 +57,13 @@ LOG_RETENTION_DAYS = 30
 
 
 # ----------------------------------------------------------------------------
-# Dashboard Export — GitHub repo path (local clone of this repo)
+# Dashboard Export — GitHub repo path (gh-pages worktree)
+# The export writes dashboard_data.json here and pushes it to the gh-pages
+# branch (the published GitHub Pages site), kept separate from the pipeline
+# code on main. Create the worktree once with:
+#   git worktree add --orphan -b gh-pages D:\Scripts\iNaturalist-pages
 # ----------------------------------------------------------------------------
-GITHUB_REPO_PATH = r"D:\Scripts\iNaturalist\RPMP-iNaturalist"
+GITHUB_REPO_PATH = r"D:\Scripts\iNaturalist-pages"
 
 
 # ----------------------------------------------------------------------------

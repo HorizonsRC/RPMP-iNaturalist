@@ -12,6 +12,12 @@ inat_token.json
 Logs/
 *.log
  
+# --- Claude Code guidance file (local context, not for the repo) ---
+CLAUDE.md
+
+# --- Generated dashboard data (published to the gh-pages branch, not main) ---
+dashboard_data.json
+
 # --- Python cache files (auto-generated, not needed) ---
 __pycache__/
 *.py[cod]

@@ -33,17 +33,17 @@ RPMP-iNaturalist/
 ├── resend_notifications.py      # Backup script — manually resend staff alerts after a pipeline failure
 ├── extract_uncategorized.py     # Utility — list iNat obs not matched to any RPMP programme
 │
-├── html/
-│   └── [embedded HTML files]    # HTML widgets embedded in the AGOL ExB dashboard
-│
-├── dashboard_data.json          # Auto-updated by iNat_Dashboard_Export.py — do not edit manually
-│
 ├── requirements.txt             # Python package dependencies — install with: pip install -r requirements.txt
 ├── config.example.py            # Template for config.py
 ├── config.py                    # LOCAL ONLY — never committed (in .gitignore)
 ├── .gitignore
 └── README.md
 ```
+
+> **Note:** The published site — the `html/` widgets and the auto-updated
+> `dashboard_data.json` — lives on the **`gh-pages`** branch, not `main`. The
+> dashboard export pushes the JSON there via a git worktree. See
+> [HTML Dashboard Files](#html-dashboard-files) below.
 
 ---
 
@@ -176,7 +176,7 @@ uncategorised observations, or as a periodic audit.
 - Parses the most recent pipeline log to extract run status (AGOL update, email alerts, warnings)
 - Optionally queries AGOL directly for live feature counts as a cross-check
 - Builds `dashboard_data.json` with observation counts, date breakdowns, species breakdowns, and recent activity
-- Commits and pushes `dashboard_data.json` to GitHub so the embedded HTML dashboard can fetch it
+- Commits and pushes `dashboard_data.json` to the **`gh-pages`** branch (via a git worktree at `D:\Scripts\iNaturalist-pages`) so the embedded HTML dashboard can fetch it
 
 **Schedule:** Run via Task Scheduler a few minutes after `RPMP_iNat_PROD.py` completes.
 
@@ -227,14 +227,21 @@ Contact the Biodiversity team for credentials if you don't have them.
 
 ## HTML Dashboard Files
 
-The `html/` folder contains HTML files embedded as iframes in the AGOL Experience Builder dashboard.  
-These are hosted via GitHub Pages at:
+The HTML files embedded as iframes in the AGOL Experience Builder dashboard live on the
+**`gh-pages`** branch (the published site), alongside `dashboard_data.json`. They are
+hosted via GitHub Pages at:
 
 ```
 https://HorizonsRC.github.io/RPMP-iNaturalist/html/[filename].html
 ```
 
-GitHub Pages must be enabled on this repo (Settings → Pages → Source: main branch).
+GitHub Pages serves this repo from the **`gh-pages`** branch, root folder
+(Settings → Pages → Source: Deploy from a branch → `gh-pages` / `/ (root)`).
+
+**Editing the dashboard HTML:** work in the gh-pages worktree at
+`D:\Scripts\iNaturalist-pages\html\` and commit/push from there — `main` does not
+contain the HTML. The worktree was created with
+`git worktree add --orphan -b gh-pages D:\Scripts\iNaturalist-pages`.
 
 ---
 

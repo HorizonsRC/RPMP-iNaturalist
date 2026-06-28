@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eradication Header</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --dark: #1e2d2b;
+  --surface: #ffffff;
+  --border: rgba(0,0,0,0.09);
+  --muted: #6b6b67;
+  --faint: #9a9a96;
+  --cat-accent: #7A5C00;
+  --cat-bg: #FFF8DC;
+  --cat-fg: #7A5C00;
+}
+html, body { height:100%; background:transparent; overflow:hidden; margin:0; }
+body { font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif; display:flex; flex-direction:column; }
+
+.header { background:var(--dark); padding:12px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-shrink:0; }
+.header-left { display:flex; align-items:center; gap:14px; }
+.back-btn { display:inline-flex; align-items:center; gap:5px; font-size:11px; color:rgba(255,255,255,0.55); background:rgba(255,255,255,0.1); padding:4px 10px; border-radius:20px; border:0.5px solid rgba(255,255,255,0.15); text-decoration:none; white-space:nowrap; }
+.back-btn:hover { background:rgba(255,255,255,0.18); }
+.divider { width:0.5px; height:28px; background:rgba(255,255,255,0.15); flex-shrink:0; }
+.header-org { font-size:10px; font-weight:600; letter-spacing:0.1em; color:rgba(255,255,255,0.4); text-transform:uppercase; margin-bottom:2px; }
+.header-title { display:flex; align-items:center; gap:10px; }
+.header-title h1 { font-size:18px; font-weight:700; color:#fff; letter-spacing:-0.2px; line-height:1; }
+.cat-tag { display:inline-block; font-size:11px; font-weight:600; padding:3px 10px; border-radius:20px; background:var(--cat-bg); color:var(--cat-fg); }
+.header-right { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.live-pill { display:flex; align-items:center; gap:5px; font-size:11px; color:rgba(255,255,255,0.6); background:rgba(255,255,255,0.1); padding:4px 10px; border-radius:20px; border:0.5px solid rgba(255,255,255,0.15); }
+.live-dot { width:6px; height:6px; border-radius:50%; background:#6fcf8e; }
+.header-updated { font-size:10px; color:rgba(255,255,255,0.38); }
+
+.desc-strip { font-size:12px; color:var(--muted); line-height:1.5; padding:8px 24px; background:var(--surface); border-bottom:0.5px solid var(--border); border-left:4px solid var(--cat-accent); flex-shrink:0; }
+.desc-strip strong { color:#1a1a18; }
+.desc-species { font-style:italic; color:var(--faint); }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-left">
+    <a class="back-btn" href="https://experience.arcgis.com/experience/82aa7e1a43d348b58faab84c956019b6" target="_blank">← Home</a>
+    <div class="divider"></div>
+    <div>
+      <div class="header-org">Horizons Regional Council · RPMP</div>
+      <div class="header-title">
+        <h1>iNaturalist Observations</h1>
+        <span class="cat-tag">Eradication</span>
+      </div>
+    </div>
+  </div>
+  <div class="header-right">
+    <span class="header-updated" id="updated"></span>
+    <span class="live-pill"><span class="live-dot"></span>Live data</span>
+  </div>
+</div>
+<div class="desc-strip">
+  <strong>Eradication</strong> — detecting and removing all known infestations to prevent further establishment.
+  <span class="desc-species"> Alligator Weed, Blue Passionflower, Cathedral Bells, Chilean &amp; Giant Rhubarb, Chinese Pennisetum, Climbing Alstroemeria, Climbing Spindleberry, Himalayan Balsam, Knotweed species, Nassella Tussock, Purple Loosestrife, Queensland Poplar, Black/Rum Cherry, Senegal Tea, Spartina species, Woolly Nightshade.</span>
+</div>
+<script>
+async function load(){
+  try{
+    const r=await fetch('https://HorizonsRC.github.io/RPMP-iNaturalist/dashboard_data.json?_='+Date.now());
+    if(!r.ok)return;
+    const data=await r.json();
+    if(data.last_updated){
+      const d=new Date(data.last_updated);
+      document.getElementById('updated').textContent='Updated '+d.toLocaleString('en-NZ',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    }
+  }catch(e){}
+}
+load();
+</script>
+</body>
+</html>

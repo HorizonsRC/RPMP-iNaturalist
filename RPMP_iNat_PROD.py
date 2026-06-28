@@ -4,13 +4,21 @@
 # RPMP iNaturalist Data Pipeline - Automated Version
 # For use with Task Scheduler - No manual interaction required
 
-import requests, pandas as pd, geopandas as gpd, json, os
+import requests, pandas as pd, geopandas as gpd, json, os, glob
 from requests_oauthlib import OAuth2Session
 import datetime, time, sys
 from arcgis.gis import GIS
 from arcgis.features import FeatureLayerCollection
 import arcpy, shapely.wkb, shutil, logging, traceback
 import inat_email_notifications
+
+# Make stdout UTF-8 so the check/arrow glyphs in log messages don't raise
+# UnicodeEncodeError on Windows (default cp1252 console encoding). File logs
+# are already UTF-8; this only affects console/stdout output.
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
 
 # ============================================================================
 # Load Config — all sensitive values live in config.py (never committed to Git)
@@ -32,6 +40,26 @@ except Exception:
 # ============================================================================
 # Logging Setup
 # ============================================================================
+def prune_old_logs(directory, pattern, retention_days):
+    """Delete log files in `directory` matching `pattern` whose mtime is older
+    than `retention_days`. Defensive: never raises — a cleanup failure must not
+    stop the pipeline. Returns the number of files removed."""
+    if not retention_days or retention_days <= 0:
+        return 0
+    removed = 0
+    cutoff = datetime.datetime.now().timestamp() - retention_days * 86400
+    try:
+        for path in glob.glob(os.path.join(directory, pattern)):
+            try:
+                if os.path.getmtime(path) < cutoff:
+                    os.remove(path)
+                    removed += 1
+            except OSError:
+                pass
+    except Exception:
+        pass
+    return removed
+
 log_dir = config.LOG_DIR
 if not os.path.exists(log_dir):
     os.makedirs(log_dir)
@@ -47,6 +75,12 @@ logger.info("="*70)
 logger.info(f"Log file: {log_filename}")
 logger.info(f"Python: {sys.version}, Pandas: {pd.__version__}, GeoPandas: {gpd.__version__}")
 script_start_time = datetime.datetime.now()
+
+# Log rotation — keep the log directory bounded (older logs deleted by mtime)
+_log_retention = getattr(config, "LOG_RETENTION_DAYS", 30)
+_pruned = prune_old_logs(log_dir, "iNat_Pipeline_*.log", _log_retention)
+if _pruned:
+    logger.info(f"Log rotation: removed {_pruned} log file(s) older than {_log_retention} days")
 
 # ============================================================================
 # OAuth Authentication — credentials from config, not hardcoded
@@ -936,9 +970,17 @@ logger.info(f"[LOG]        {log_filename}")
 # Run Summary Email
 try:
     from inat_email_notifications import send_run_summary, ADMIN_EMAIL
+    # Build the staff-notified list from the actual email send results so the
+    # run summary reflects who was really alerted (results['staff_notifications']
+    # is populated by process_notifications() above).
+    staff_notified = [
+        {"name": name, "count": info["count"]}
+        for name, info in results.get("staff_notifications", {}).items()
+        if info.get("count", 0) > 0
+    ]
     summary = {"success":agol_success,"total_observations":len(gdf_all),"new_observations":len(new_obs_ids),
                "observations_by_programme":{"Progressive Containment":len(gdf_progressive_joined),"Eradication":len(gdf_eradication_joined),"Exclusion":len(gdf_exclusion_joined)},
-               "agol_updated":agol_success,"email_alerts_sent":email_success,"staff_notified":[],"errors":[]}
+               "agol_updated":agol_success,"email_alerts_sent":email_success,"staff_notified":staff_notified,"errors":[]}
     if send_run_summary(summary, ADMIN_EMAIL): logger.info("✓ Run summary email sent")
     else: logger.warning("⚠ Run summary email failed")
 except Exception as e: logger.warning(f"⚠ Could not send run summary: {e}")

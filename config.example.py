@@ -51,6 +51,10 @@ NOTIFICATION_FILE = r"\\yourserver\path\to\pending_notifications.json"
 LOG_DIR           = r"D:\Scripts\iNaturalist\Logs"
 DASHBOARD_LOG_DIR = r"D:\Scripts\iNaturalist\RPMP_iNat_Dashboard\Logs"
 
+# Log rotation: at the start of each run, delete log files older than this many
+# days from the directories above. Set to 0 to disable automatic cleanup.
+LOG_RETENTION_DAYS = 30
+
 
 # ----------------------------------------------------------------------------
 # Dashboard Export — GitHub repo path (local clone of this repo)

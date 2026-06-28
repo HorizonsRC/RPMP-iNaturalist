@@ -33,6 +33,14 @@ from pathlib import Path
 import geopandas as gpd
 import pandas as pd
 
+# Make stdout UTF-8 so the check/arrow glyphs in log messages don't raise
+# UnicodeEncodeError on Windows (default cp1252 console encoding). File logs
+# are already UTF-8; this only affects console/stdout output.
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
+
 # ============================================================================
 # Load Config
 # ============================================================================
@@ -95,6 +103,33 @@ logging.basicConfig(
     ],
 )
 logger = logging.getLogger(__name__)
+
+
+def prune_old_logs(directory, pattern, retention_days):
+    """Delete log files in `directory` matching `pattern` whose mtime is older
+    than `retention_days`. Defensive: never raises. Returns the count removed."""
+    if not retention_days or retention_days <= 0:
+        return 0
+    removed = 0
+    cutoff = datetime.datetime.now().timestamp() - retention_days * 86400
+    try:
+        for path in glob.glob(os.path.join(directory, pattern)):
+            try:
+                if os.path.getmtime(path) < cutoff:
+                    os.remove(path)
+                    removed += 1
+            except OSError:
+                pass
+    except Exception:
+        pass
+    return removed
+
+
+# Log rotation — keep the dashboard log directory bounded
+_log_retention = getattr(config, "LOG_RETENTION_DAYS", 30)
+_pruned = prune_old_logs(dashboard_log_dir, "iNat_Dashboard_*.log", _log_retention)
+if _pruned:
+    logger.info(f"Log rotation: removed {_pruned} dashboard log(s) older than {_log_retention} days")
 
 
 # ============================================================================

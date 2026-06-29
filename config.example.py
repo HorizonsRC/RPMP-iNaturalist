@@ -41,7 +41,9 @@ AGOL_SERVICE_ITEM_ID = "YOUR_SERVICE_ITEM_ID_HERE"
 # File Paths — GDB and SDE (internal network paths)
 # Update these to match your network/machine setup
 # ----------------------------------------------------------------------------
-GDB_SMU_PATH = r"\\yourserver\path\to\SMU Map.gdb"
+GDB_SMU_PATH = r"\\yourserver\path\to\SMU_Layers.gdb"
+# OperatingAreas fallback FC lives in a different (older) GDB than the SMU layers.
+GDB_OPERATING_AREAS_PATH = r"\\yourserver\path\to\SMU Map.gdb"
 SDE_PATH     = r"\\yourserver\path\to\connection.sde"
 OUTPUT_GDB   = r"\\yourserver\path\to\output.gdb"
 

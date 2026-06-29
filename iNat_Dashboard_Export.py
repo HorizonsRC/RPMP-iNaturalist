@@ -417,7 +417,9 @@ def build_payload(gdb: dict, log_info: dict, tracking: dict, agol_counts: dict |
 
         if prog_key in ("Eradication", "Progressive Containment") and "is_in_site" in gdf.columns:
             if prog_key == "Progressive Containment" and "Designation" in gdf.columns:
-                gpnz_mask = gdf["Designation"] == "GPNZ"
+                # Designation values are "GNPZ" (not "GPNZ"); the old literal never matched.
+                # JSON key stays "gpnz_excluded" - it's part of the published dashboard contract.
+                gpnz_mask = gdf["Designation"] == "GNPZ"
                 gpnz_excluded = int(gpnz_mask.sum())
                 gdf_work = gdf[~gpnz_mask]
             else:

@@ -346,27 +346,31 @@ except Exception as e:
 # ============================================================================
 # Species to SMU and Common Name Mappings
 # ============================================================================
+# SMU layer names target the maintained SMU_Layers.gdb (config.GDB_SMU_PATH).
+# NOTE: Nassella neesiana (Chilean needle grass) now has its own SMU_Chilean_Needle_Grass
+# layer in the new GDB; kept on SMU_Nasella_Tussock here for now (faithful) - revisit if
+# per-species geometry matters.
 taxon_name_to_smu = {
     "Passiflora tripartita":"SMU_Banana_Passionfruit","Passiflora tarminiana":"SMU_Banana_Passionfruit",
     "Passiflora tripartita mollissima":"SMU_Banana_Passionfruit","Passiflora tripartita azuayensis":"SMU_Banana_Passionfruit",
     "Elkea":"SMU_Banana_Passionfruit","Tacsonia":"SMU_Banana_Passionfruit",
     "Osteospermum moniliferum":"SMU_Boneseed","Osteospermum moniliferum moniliferum":"SMU_Boneseed",
-    "Berberis darwinii":"SMU_Darwins_barberry","Rhamnus alaternus":None,"Salix cinerea":None,
-    "Araujia hortorum":"SMU_Mothplant","Araujia sericifera":"SMU_Mothplant","Clematis vitalba":"SMU_Old_mans_beard",
-    "Pinus contorta":"SMU_Pest_conifers","Pinus uncinata":"SMU_Pest_conifers","Pinus mugo":"SMU_Pest_conifers","Pinus sylvestris":"SMU_Pest_conifers",
-    "Alternanthera philoxeroides":"SMU_Master_Lay_Alligator_Weed","Passiflora caerulea":"SMU_Blue_passion_flower",
-    "Cobaea scandens":"SMU_Cathedral_Bells","Gunnera tinctoria":"SMU_Gunnera","Gunnera manicata":"SMU_Gunnera",
-    "Pennisetum alopecuroides":"SMU_Chinese_pennisetum","Bomarea multiflora":"SMU_Climbing_Alstromeria",
+    "Berberis darwinii":"SMU_Darwins_Barberry","Rhamnus alaternus":"SMU_Evergreen_Buckthorn","Salix cinerea":"SMU_Grey_Willow",
+    "Araujia hortorum":"SMU_Mothplant","Araujia sericifera":"SMU_Mothplant","Clematis vitalba":"SMU_Old_Mans_Beard",
+    "Pinus contorta":"SMU_Contorta","Pinus uncinata":"SMU_Contorta","Pinus mugo":"SMU_Contorta","Pinus sylvestris":"SMU_Scots_Pine",
+    "Alternanthera philoxeroides":"SMU_Alligator_Weed","Passiflora caerulea":"SMU_Blue_Passion_Flower",
+    "Cobaea scandens":"SMU_Cathedral_Bells","Gunnera tinctoria":"SMU_Chilean_Rhubarb","Gunnera manicata":"SMU_Chilean_Rhubarb",
+    "Pennisetum alopecuroides":"SMU_Chinese_Pennisetum","Bomarea multiflora":"SMU_Climbing_Alstromeria",
     "Celastrus orbiculatus":"SMU_Climbing_Spindleberry","Impatiens glandulifera":"SMU_Himalayan_Balsam",
     "Nasella neesiana":"SMU_Nasella_Tussock","Nassella trichotoma":"SMU_Nasella_Tussock","Nassella tenuissima":"SMU_Nasella_Tussock",
-    "Lythrum salicaria":"SMU_Purple_loosestrife","Homalanthus populifolius":"SMU_Queensland_poplar",
-    "Prunus serotina":"SMU_Rum_Cherry","Gymnocoronis spilanthoides":"SMU_Senegal_tea",
+    "Lythrum salicaria":"SMU_Purple_Loosestrife","Homalanthus populifolius":"SMU_Queensland_Poplar",
+    "Prunus serotina":"SMU_Rum_Cherry","Gymnocoronis spilanthoides":"SMU_Senegal_Tea",
     "Spartina alterniflora":"SMU_Spartina","Spartina anglica":"SMU_Spartina","Sporobolus anglicus":"SMU_Spartina",
     "Sporobolus × townsendii":"SMU_Spartina","Spartina densiflora":"SMU_Spartina","Spartina maritima":"SMU_Spartina","Spartina patens":"SMU_Spartina",
-    "Solanum mauritianum":"SMU_Woolly_Nightshade","Reynoutria japonica":"SMU_knotweed","Fallopia japonica":"SMU_knotweed",
+    "Solanum mauritianum":"SMU_Woolly_Nightshade","Reynoutria japonica":"SMU_Knotweed","Fallopia japonica":"SMU_Knotweed",
     "Pennisetum macrourum":"SMU_African_Feather_Grass","Sagittaria platyphylla":"SMU_Sagittaria","Sagittaria montevidensis":"SMU_Arrowhead",
     "Bolboschoenus robustus":None,"Juncus squarrosus":None,"Utricularia gibba":None,"Zizania latifolia":None,
-    "Xanthium occidentale":None,"Phragmites australis":None,"Carthamus lanatus":None,"Pittosporum undulatum":None,"Hieracium lepidulum":None,
+    "Xanthium occidentale":"SMU_Noogoora_Bur","Phragmites australis":None,"Carthamus lanatus":"SMU_Saffron_Thistle","Pittosporum undulatum":"SMU_Sweet_Pittosporum","Hieracium lepidulum":None,
 }
 
 taxon_name_to_common = {
@@ -425,6 +429,8 @@ for prog_name, gdf_prog in [("Progressive Containment",gdf_progressive),("Eradic
 # ============================================================================
 gdb_path = config.GDB_SMU_PATH
 sde_path = config.SDE_PATH
+# OperatingAreas FC is not in SMU_Layers.gdb; the fallback joins read it from the old GDB.
+operating_areas_path = getattr(config, "GDB_OPERATING_AREAS_PATH", gdb_path)
 
 def arc_sde_feature_to_gdf(sde_conn_path, feature_path_within_sde):
     full_path = feature_path_within_sde if sde_conn_path in feature_path_within_sde else fr"{sde_conn_path}\{feature_path_within_sde}"
@@ -462,6 +468,9 @@ def spatial_join_with_smu(gdf, programme_name, distance_threshold=100):
         logger.info(f"\n  Processing {smu_layer}...")
         try:
             smu_gdf = gpd.read_file(gdb_path, layer=smu_layer)
+            # SMU_Layers.gdb renamed three fields vs the old SMU Map.gdb; map back to the
+            # canonical names the rest of the pipeline/export/dashboard expect.
+            smu_gdf = smu_gdf.rename(columns={"operatorName":"Name","Zone":"Designation","SMUstatus":"Status_25_26"})
             mask = gdf["smu_layer"] == smu_layer
             obs_for_smu = gdf[mask].copy()
             joined = gpd.sjoin(obs_for_smu, smu_gdf[["operatingArea","Name","SMU_Name","Designation","Status_25_26","geometry"]], how="left", predicate="within")
@@ -490,56 +499,20 @@ def spatial_join_with_smu(gdf, programme_name, distance_threshold=100):
         except Exception as e:
             logger.error(f"    ✗ Error loading {smu_layer}: {e}\n{traceback.format_exc()}")
 
-    # PC special handling
-    if programme_name == "Progressive Containment":
-        target_species = ["Evergreen Buckthorn","Grey Willow"]
-        needs_pc = gdf["SMU_Name"].isna() & gdf["speciesName"].isin(target_species)
-        if needs_pc.sum() > 0:
-            logger.info(f"\n  Special PC handling for {needs_pc.sum()} observations ({', '.join(target_species)})")
-            try:
-                pc_zone_gdf = arc_sde_feature_to_gdf(sde_path, "biosecurity.GISADMIN.Weeds_ProgressiveContainmentMappedZone")
-                obs_need_pc = gdf[needs_pc].copy()
-                if "Species" in pc_zone_gdf.columns:
-                    pc_zone_gdf = pc_zone_gdf[pc_zone_gdf["Species"].isin(obs_need_pc["speciesName"].unique())]
-                if pc_zone_gdf.crs is not None and obs_need_pc.crs is not None and pc_zone_gdf.crs != obs_need_pc.crs:
-                    obs_need_pc = obs_need_pc.to_crs(pc_zone_gdf.crs)
-                matched_pc = 0
-                for species in obs_need_pc["speciesName"].unique():
-                    obs_sp = obs_need_pc[obs_need_pc["speciesName"] == species]
-                    pc_sp = pc_zone_gdf[pc_zone_gdf["Species"] == species] if "Species" in pc_zone_gdf.columns else pd.DataFrame()
-                    if len(pc_sp) == 0: continue
-                    joined = gpd.sjoin(obs_sp, pc_sp[["Label","geometry"]], how="left", predicate="within")
-                    for idx in obs_sp.index:
-                        if idx in joined.index:
-                            lv = joined.loc[idx, "Label"]
-                            if pd.notna(lv):
-                                gdf.at[idx, "Designation"] = lv.iloc[0] if hasattr(lv,"iloc") else lv
-                                matched_pc += 1
-                logger.info(f"    ✓ PC Mapped Zone: {matched_pc}/{len(obs_need_pc)} matched")
-                oa_gdf = gpd.read_file(gdb_path, layer="OperatingAreas")
-                oa_obs = obs_need_pc.to_crs(oa_gdf.crs) if oa_gdf.crs != obs_need_pc.crs else obs_need_pc
-                j_oa = gpd.sjoin(oa_obs, oa_gdf[["operatingArea","Name","geometry"]], how="left", predicate="within")
-                oa_col = "operatingArea_right" if "operatingArea_right" in j_oa.columns else "operatingArea"
-                nm_col = "Name_right" if "Name_right" in j_oa.columns else "Name"
-                moa = 0
-                for idx in j_oa.index:
-                    if idx not in gdf.index: continue
-                    if pd.notna(j_oa.loc[idx,"index_right"]):
-                        if pd.notna(j_oa.loc[idx,oa_col]): gdf.at[idx,"operatingArea"] = j_oa.loc[idx,oa_col]
-                        if pd.notna(j_oa.loc[idx,nm_col]): gdf.at[idx,"Name"] = j_oa.loc[idx,nm_col]
-                        moa += 1
-                logger.info(f"    ✓ Operating Areas: {moa}/{len(obs_need_pc)} matched")
-            except Exception as e:
-                logger.error(f"    ✗ PC zone fallback error: {e}\n{traceback.format_exc()}")
+    # Evergreen Buckthorn (EBT) and Grey Willow (GWO) now have their own SMU layers
+    # (SMU_Evergreen_Buckthorn / SMU_Grey_Willow), so the within/nearest join above
+    # assigns their SMU_Name / operatingArea / Designation directly. The former SDE
+    # "PC Mapped Zone" special-case block was retired here: it had been dead code
+    # (it matched speciesName against full names, but speciesName holds 3-letter codes),
+    # and the SMU layer's Zone field now supplies the AMZ/GNPZ designation.
 
-    # Tertiary fallback
+    # Tertiary fallback: any obs that didn't land in an SMU polygon gets its operating
+    # area / operator from the OperatingAreas FC (sourced from the old SMU Map.gdb).
     no_smu = gdf["SMU_Name"].isna()
-    if programme_name == "Progressive Containment":
-        no_smu = gdf["speciesName"].isin(["Evergreen Buckthorn","Grey Willow"]) & gdf["SMU_Name"].isna()
     if no_smu.sum() > 0:
         logger.info(f"\n  Tertiary fallback (OperatingAreas) for {no_smu.sum()} remaining...")
         try:
-            oa_gdf = gpd.read_file(gdb_path, layer="OperatingAreas")
+            oa_gdf = gpd.read_file(operating_areas_path, layer="OperatingAreas")
             j = gpd.sjoin(gdf[no_smu].copy(), oa_gdf[["operatingArea","Name","geometry"]], how="left", predicate="within")
             ma, un = 0, []
             for idx in j.index:
@@ -744,7 +717,7 @@ def set_field_aliases(gdb_path, fc_name, alias_dict):
 
 field_aliases = {"observation_url":"iNaturalist Observation URL Link","taxon_name":"Taxon Name","place_guess":"Location",
     "programme":"RPMP Programme","observed_on":"Observation Date","user_login":"Observer User Name","Name":"Operator Name",
-    "operatingArea":"Operating Area","SMU_Name":"SMU Name","Status_25_26":"Status 25-26",
+    "operatingArea":"Operating Area","SMU_Name":"SMU Name","Status_25_26":"SMU Status",
     "quality_grade":"Observation Quality Grade","flowers_fruits":"Flowers or Fruit","description":"Description",
     "is_in_site":"In Managed Site (Y/N)","BaseSiteID":"Managed Site ID (if applicable)"}
 

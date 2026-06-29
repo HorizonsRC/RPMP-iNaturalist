@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-28T23:14:00Z",
+  "last_updated": "2026-06-29T05:15:22Z",
   "total_observations": 539,
   "new_observations": 0,
   "date_breakdown": {
@@ -15,14 +15,14 @@
       "count": 141,
       "species_in_list": 27,
       "unique_observed": 14,
-      "smu_match_rate": 97.9,
+      "smu_match_rate": 99.3,
       "in_managed_site": 50,
       "not_in_managed_site": 91,
       "gpnz_excluded": null,
       "most_recent": {
         "date": "2026-06-16",
         "species": "WNS",
-        "location": "Palmerston North"
+        "location": "PN"
       },
       "species_breakdown": [
         {
@@ -88,7 +88,7 @@
       "count": 3,
       "species_in_list": 13,
       "unique_observed": 3,
-      "smu_match_rate": 33.3,
+      "smu_match_rate": 66.7,
       "in_managed_site": null,
       "not_in_managed_site": null,
       "gpnz_excluded": null,
@@ -117,14 +117,14 @@
       "count": 395,
       "species_in_list": 23,
       "unique_observed": 9,
-      "smu_match_rate": 69.4,
+      "smu_match_rate": 99.5,
       "in_managed_site": 42,
-      "not_in_managed_site": 353,
-      "gpnz_excluded": 0,
+      "not_in_managed_site": 115,
+      "gpnz_excluded": 238,
       "most_recent": {
         "date": "2026-06-13",
         "species": "OMB",
-        "location": "Tararua"
+        "location": "TR"
       },
       "species_breakdown": [
         {
@@ -171,7 +171,7 @@
     "agol_status": "success",
     "email_status": "none needed",
     "last_pipeline_run": null,
-    "log_file": "iNat_Pipeline_20260629_050017.log",
+    "log_file": "iNat_Pipeline_20260629_170517.log",
     "agol_live_counts": {
       "iNat_Exclusion": 3,
       "iNat_Eradication": 141,
@@ -184,140 +184,140 @@
     {
       "species": "WNS",
       "category": "Eradication",
-      "location": "Palmerston North",
+      "location": "PN",
       "observed_on": "2026-06-16",
       "id": 372182200
     },
     {
       "species": "OMB",
       "category": "Progressive Containment",
-      "location": "Tararua",
+      "location": "TR",
       "observed_on": "2026-06-13",
       "id": 371138140
     },
     {
       "species": "BAP",
       "category": "Progressive Containment",
-      "location": "Palmerston North",
+      "location": "PN",
       "observed_on": "2026-05-21",
       "id": 363590567
     },
     {
       "species": "GWO",
       "category": "Progressive Containment",
-      "location": "",
+      "location": "WH",
       "observed_on": "2026-05-09",
       "id": 360157799
     },
     {
       "species": "WNS",
       "category": "Eradication",
-      "location": "Whanganui",
+      "location": "WH",
       "observed_on": "2026-05-06",
       "id": 360502453
     },
     {
       "species": "CHR",
       "category": "Eradication",
-      "location": "Whanganui",
+      "location": "WH",
       "observed_on": "2026-05-06",
       "id": 361614783
     },
     {
       "species": "BAP",
       "category": "Progressive Containment",
-      "location": "Whanganui",
+      "location": "WH",
       "observed_on": "2026-05-06",
       "id": 360502483
     },
     {
       "species": "BAP",
       "category": "Progressive Containment",
-      "location": "Horowhenua",
+      "location": "HW",
       "observed_on": "2026-04-26",
       "id": 356816741
     },
     {
       "species": "GWO",
       "category": "Progressive Containment",
-      "location": "",
+      "location": "HW",
       "observed_on": "2026-04-26",
       "id": 356819306
     },
     {
       "species": "BAP",
       "category": "Progressive Containment",
-      "location": "Horowhenua",
+      "location": "HW",
       "observed_on": "2026-04-25",
       "id": 356809265
     },
     {
       "species": "BAP",
       "category": "Progressive Containment",
-      "location": "Horowhenua",
+      "location": "HW",
       "observed_on": "2026-04-25",
       "id": 356810616
     },
     {
       "species": "BAP",
       "category": "Progressive Containment",
-      "location": "Horowhenua",
+      "location": "HW",
       "observed_on": "2026-04-25",
       "id": 356806837
     },
     {
       "species": "EBT",
       "category": "Progressive Containment",
-      "location": "",
+      "location": "HW",
       "observed_on": "2026-04-19",
       "id": 362156444
     },
     {
       "species": "OMB",
       "category": "Progressive Containment",
-      "location": "Taihape",
+      "location": "TH",
       "observed_on": "2026-04-08",
       "id": 348188121
     },
     {
       "species": "GWO",
       "category": "Progressive Containment",
-      "location": "",
+      "location": "OH",
       "observed_on": "2026-04-06",
       "id": 347744678
     },
     {
       "species": "BAP",
       "category": "Progressive Containment",
-      "location": "Horowhenua",
+      "location": "HW",
       "observed_on": "2026-03-28",
       "id": 345624198
     },
     {
       "species": "OMB",
       "category": "Progressive Containment",
-      "location": "Whanganui",
+      "location": "WH",
       "observed_on": "2026-03-22",
       "id": 344349306
     },
     {
       "species": "OMB",
       "category": "Progressive Containment",
-      "location": "Palmerston North",
+      "location": "PN",
       "observed_on": "2026-03-21",
       "id": 344104863
     },
     {
       "species": "OMB",
       "category": "Progressive Containment",
-      "location": "Palmerston North",
+      "location": "PN",
       "observed_on": "2026-03-21",
       "id": 344097006
     },
     {
       "species": "OMB",
       "category": "Progressive Containment",
-      "location": "Palmerston North",
+      "location": "PN",
       "observed_on": "2026-03-21",
       "id": 344065706
     }

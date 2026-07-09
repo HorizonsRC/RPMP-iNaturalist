@@ -1,13 +1,13 @@
 {
-  "last_updated": "2026-07-09T05:15:22Z",
-  "total_observations": 539,
+  "last_updated": "2026-07-09T17:10:24Z",
+  "total_observations": 540,
   "new_observations": 0,
   "date_breakdown": {
-    "last_7_days": 0,
+    "last_7_days": 1,
     "last_30_days": 2,
     "last_3_months": 11,
-    "last_year": 76,
-    "older_than_1_year": 445,
+    "last_year": 75,
+    "older_than_1_year": 446,
     "unknown": 5
   },
   "categories": {
@@ -114,17 +114,17 @@
       "source": "gdb"
     },
     "progressive_containment": {
-      "count": 395,
+      "count": 396,
       "species_in_list": 23,
       "unique_observed": 9,
       "smu_match_rate": 99.5,
-      "in_managed_site": 42,
+      "in_managed_site": 43,
       "not_in_managed_site": 115,
       "gpnz_excluded": 238,
       "most_recent": {
-        "date": "2026-06-13",
-        "species": "OMB",
-        "location": "TR"
+        "date": "2026-07-06",
+        "species": "CON",
+        "location": "TH"
       },
       "species_breakdown": [
         {
@@ -153,7 +153,7 @@
         },
         {
           "species": "CON",
-          "count": 14
+          "count": 15
         },
         {
           "species": "MPT",
@@ -168,21 +168,26 @@
     }
   },
   "system": {
-    "agol_status": "unknown",
-    "email_status": "unknown",
+    "agol_status": "success",
+    "email_status": "none needed",
     "last_pipeline_run": null,
-    "log_file": "iNat_Pipeline_20260709_170519.log",
+    "log_file": "iNat_Pipeline_20260710_050019.log",
     "agol_live_counts": {
       "iNat_Exclusion": 3,
       "iNat_Eradication": 141,
-      "iNat_ProgressiveContainment": 0,
-      "iNat_AllProgrammes": 539
+      "iNat_ProgressiveContainment": 396,
+      "iNat_AllProgrammes": 540
     }
   },
-  "warnings": [
-    "Progressive Containment: GDB has 395 features, AGOL has 0 \u2014 possible sync issue"
-  ],
+  "warnings": [],
   "recent_observations": [
+    {
+      "species": "CON",
+      "category": "Progressive Containment",
+      "location": "TH",
+      "observed_on": "2026-07-06",
+      "id": 379628751
+    },
     {
       "species": "WNS",
       "category": "Eradication",
@@ -315,13 +320,6 @@
       "location": "PN",
       "observed_on": "2026-03-21",
       "id": 344097006
-    },
-    {
-      "species": "OMB",
-      "category": "Progressive Containment",
-      "location": "PN",
-      "observed_on": "2026-03-21",
-      "id": 344065706
     }
   ]
 }

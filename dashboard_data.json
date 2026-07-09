@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-08T17:10:25Z",
+  "last_updated": "2026-07-09T05:15:22Z",
   "total_observations": 539,
   "new_observations": 0,
   "date_breakdown": {
@@ -168,18 +168,20 @@
     }
   },
   "system": {
-    "agol_status": "success",
-    "email_status": "none needed",
+    "agol_status": "unknown",
+    "email_status": "unknown",
     "last_pipeline_run": null,
-    "log_file": "iNat_Pipeline_20260709_050020.log",
+    "log_file": "iNat_Pipeline_20260709_170519.log",
     "agol_live_counts": {
       "iNat_Exclusion": 3,
       "iNat_Eradication": 141,
-      "iNat_ProgressiveContainment": 395,
+      "iNat_ProgressiveContainment": 0,
       "iNat_AllProgrammes": 539
     }
   },
-  "warnings": [],
+  "warnings": [
+    "Progressive Containment: GDB has 395 features, AGOL has 0 \u2014 possible sync issue"
+  ],
   "recent_observations": [
     {
       "species": "WNS",

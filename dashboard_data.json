@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-07-09T17:10:24Z",
-  "total_observations": 540,
+  "last_updated": "2026-07-10T05:15:27Z",
+  "total_observations": 541,
   "new_observations": 0,
   "date_breakdown": {
-    "last_7_days": 1,
+    "last_7_days": 2,
     "last_30_days": 2,
     "last_3_months": 11,
     "last_year": 75,
@@ -12,22 +12,22 @@
   },
   "categories": {
     "eradication": {
-      "count": 141,
+      "count": 142,
       "species_in_list": 27,
       "unique_observed": 14,
       "smu_match_rate": 99.3,
       "in_managed_site": 50,
-      "not_in_managed_site": 91,
+      "not_in_managed_site": 92,
       "gpnz_excluded": null,
       "most_recent": {
-        "date": "2026-06-16",
+        "date": "2026-07-09",
         "species": "WNS",
         "location": "PN"
       },
       "species_breakdown": [
         {
           "species": "WNS",
-          "count": 55
+          "count": 56
         },
         {
           "species": "PLS",
@@ -169,18 +169,25 @@
   },
   "system": {
     "agol_status": "success",
-    "email_status": "none needed",
+    "email_status": "unknown",
     "last_pipeline_run": null,
-    "log_file": "iNat_Pipeline_20260710_050019.log",
+    "log_file": "iNat_Pipeline_20260710_170519.log",
     "agol_live_counts": {
       "iNat_Exclusion": 3,
-      "iNat_Eradication": 141,
+      "iNat_Eradication": 142,
       "iNat_ProgressiveContainment": 396,
-      "iNat_AllProgrammes": 540
+      "iNat_AllProgrammes": 541
     }
   },
   "warnings": [],
   "recent_observations": [
+    {
+      "species": "WNS",
+      "category": "Eradication",
+      "location": "PN",
+      "observed_on": "2026-07-09",
+      "id": 379811554
+    },
     {
       "species": "CON",
       "category": "Progressive Containment",
@@ -217,6 +224,13 @@
       "id": 360157799
     },
     {
+      "species": "BAP",
+      "category": "Progressive Containment",
+      "location": "WH",
+      "observed_on": "2026-05-06",
+      "id": 360502483
+    },
+    {
       "species": "WNS",
       "category": "Eradication",
       "location": "WH",
@@ -231,20 +245,6 @@
       "id": 361614783
     },
     {
-      "species": "BAP",
-      "category": "Progressive Containment",
-      "location": "WH",
-      "observed_on": "2026-05-06",
-      "id": 360502483
-    },
-    {
-      "species": "BAP",
-      "category": "Progressive Containment",
-      "location": "HW",
-      "observed_on": "2026-04-26",
-      "id": 356816741
-    },
-    {
       "species": "GWO",
       "category": "Progressive Containment",
       "location": "HW",
@@ -255,8 +255,8 @@
       "species": "BAP",
       "category": "Progressive Containment",
       "location": "HW",
-      "observed_on": "2026-04-25",
-      "id": 356809265
+      "observed_on": "2026-04-26",
+      "id": 356816741
     },
     {
       "species": "BAP",
@@ -264,6 +264,13 @@
       "location": "HW",
       "observed_on": "2026-04-25",
       "id": 356810616
+    },
+    {
+      "species": "BAP",
+      "category": "Progressive Containment",
+      "location": "HW",
+      "observed_on": "2026-04-25",
+      "id": 356809265
     },
     {
       "species": "BAP",
@@ -313,13 +320,6 @@
       "location": "PN",
       "observed_on": "2026-03-21",
       "id": 344104863
-    },
-    {
-      "species": "OMB",
-      "category": "Progressive Containment",
-      "location": "PN",
-      "observed_on": "2026-03-21",
-      "id": 344097006
     }
   ]
 }

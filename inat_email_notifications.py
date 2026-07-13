@@ -265,7 +265,16 @@ def process_notifications(notification_file_path):
         else:
             email_address = STAFF_EMAILS.get(staff_name)
             if not email_address:
-                print(f"  ⚠ No email address configured for {staff_name}")
+                # A notifiable observation with nobody to send it to. This must be
+                # loud: it used to `continue` silently, which reported as
+                # "Sent: 0, Failed: 0" and let real Eradication/Exclusion alerts
+                # vanish. Usually means the observation's operatingArea has no
+                # entry in config.AREA_TO_STAFF.
+                areas = sorted({n.get('operating_area') for n in staff_notifications})
+                print(f"  ✗ UNDELIVERABLE — no email configured for staff '{staff_name}' "
+                      f"(operating areas: {areas})")
+                results['emails_failed'] += len(staff_notifications)
+                results.setdefault('undeliverable', []).extend(staff_notifications)
                 continue
         
         print(f"  Email: {email_address}")
@@ -448,13 +457,38 @@ def send_run_summary(summary_data, admin_email):
         prog_breakdown += "</ul>"
     
     # Build notification summary
+    #
+    # Three distinct states — do NOT collapse them. Previously an empty
+    # staff_notified list was reported as "no new Eradication/Exclusion
+    # observations", which is a different claim entirely: a notifiable
+    # observation that failed to reach anyone was reported as nothing to report.
     notification_summary = ""
     if summary_data.get('staff_notified'):
         notification_summary = "<h3>Staff Notified:</h3><ul>"
         for staff in summary_data['staff_notified']:
             notification_summary += f"<li><strong>{staff['name']}:</strong> {staff['count']} observation(s)</li>"
         notification_summary += "</ul>"
-    else:
+
+    undeliverable = summary_data.get('undeliverable') or []
+    if undeliverable:
+        notification_summary += (
+            "<div style='background-color:#ffebee;padding:15px;"
+            "border-left:4px solid #f44336;margin:15px 0;'>"
+            "<h3 style='color:#c62828;margin-top:0;'>⚠ NOTIFICATIONS NOT DELIVERED</h3>"
+            f"<p><strong>{len(undeliverable)} notifiable observation(s)</strong> were detected "
+            "but could not be emailed — no staff member is mapped to their operating area. "
+            "Check <code>AREA_TO_STAFF</code> in config.py.</p><ul>"
+        )
+        for n in undeliverable:
+            notification_summary += (
+                f"<li><strong>{n.get('species_name') or n.get('taxon_name')}</strong> "
+                f"({n.get('programme')}) — operating area "
+                f"<code>{n.get('operating_area')}</code> — "
+                f"<a href=\"{n.get('observation_url')}\">obs {n.get('observation_id')}</a></li>"
+            )
+        notification_summary += "</ul></div>"
+
+    if not summary_data.get('staff_notified') and not undeliverable:
         notification_summary = "<p>✓ No staff notifications sent (no new Eradication/Exclusion observations)</p>"
     
     # Build error list

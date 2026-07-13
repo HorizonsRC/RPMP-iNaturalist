@@ -26,11 +26,27 @@ INAT_TOKEN_FILE = r"D:\Scripts\iNaturalist\inat_token.json"
 
 
 # ----------------------------------------------------------------------------
-# ArcGIS Online (AGOL) Credentials
-# Used as a fallback if GIS("pro") doesn't work
+# ArcGIS Online (AGOL) Connection
+#
+# The org signs in with SSO, so there is no built-in AGOL password to script
+# with. The pipeline therefore authenticates using the ArcGIS Pro session
+# (GIS("pro")) — and so does arcpy, for the Append step.
+#
+# ⚠ CONSEQUENCE: whichever account ArcGIS Pro is signed into IS the account the
+# pipeline runs as. Signing Pro into a different account breaks the scheduled
+# run — the layers still read fine, but every delete fails with the unhelpful
+# "This operation is not supported. (Error Code: 400)".
+#
+# ArcGIS Pro on the scheduled-task machine must stay signed in as
+# AGOL_EXPECTED_USERNAME below. The pipeline verifies this before editing
+# anything and aborts the AGOL step with a clear message if it doesn't match,
+# rather than half-failing.
 # ----------------------------------------------------------------------------
-AGOL_USERNAME = "YOUR_AGOL_USERNAME_HERE"
-AGOL_PASSWORD = "YOUR_AGOL_PASSWORD_HERE"
+
+# The account with edit rights on the service (normally the service owner).
+# Must exactly match the username ArcGIS Pro reports — note AGOL org usernames
+# are usually suffixed with the org short name, e.g. "JSmith_HorizonsRC".
+AGOL_EXPECTED_USERNAME = "YOUR_AGOL_USERNAME_HERE"
 
 # The hosted feature service item ID in AGOL
 # Find this in the item URL in ArcGIS Online
@@ -93,10 +109,27 @@ STAFF_EMAILS = {
     # Add more staff here as needed
 }
 
-# Map operating areas to the responsible staff member
-# Keys must match the 'operatingArea' values in the GDB exactly
+# Map operating areas to the responsible staff member.
+#
+# ⚠ Keys must match the RAW value stored in the GDB, not what you see in Pro.
+# The SMU layer's `operatingArea` field uses a CODED-VALUE DOMAIN: ArcGIS Pro
+# displays "Palmerston North", but arcpy's SearchCursor returns the stored code
+# "PN". Keying this dict on the descriptions silently sends every notification
+# to "Unassigned", where it is dropped.
+#
+# The OperatingAreas fallback GDB still stores full descriptions, so BOTH forms
+# can reach this lookup — keep keys for both.
+#
+# Current SMU domain (check with arcpy.da.ListDomains if areas change):
+#   PN -> Palmerston North   TR -> Tararua     HW -> Horowhenua
+#   WH -> Whanganui          TH -> Taihape     TG -> Tongario
+#   OH -> Ohura
 AREA_TO_STAFF = {
-    'Tongariro':        'Staff Name 1',
-    'Taihape':          'Staff Name 2',
-    # Add more areas here as needed
+    # Domain codes (what the SMU layer actually stores)
+    'PN':               'Staff Name 1',
+    'TR':               'Staff Name 2',
+    # Full descriptions (what the OperatingAreas fallback GDB stores)
+    'Palmerston North': 'Staff Name 1',
+    'Tararua':          'Staff Name 2',
+    # Add more areas here as needed — add BOTH the code and the description
 }

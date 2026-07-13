@@ -29,13 +29,8 @@ except ImportError:
     print("ERROR: config.py not found. Copy config.example.py → config.py and fill in values.")
     sys.exit(1)
 
-# ============================================================================
-# AGOL Connection
-# ============================================================================
-try:
-    gis = GIS("pro")
-except Exception:
-    gis = GIS("https://www.arcgis.com", config.AGOL_USERNAME, config.AGOL_PASSWORD)
+# AGOL is connected later, in the "UPDATING ARCGIS ONLINE" section, once logging
+# exists and the identity can be verified before any edits are made.
 
 # ============================================================================
 # Logging Setup
@@ -813,29 +808,39 @@ else:
 # ============================================================================
 logger.info("="*70 + "\nUPDATING ARCGIS ONLINE\n" + "="*70)
 
+# The org uses SSO, so there is no built-in password to authenticate with: both
+# auth paths here (the arcgis API for delete, and arcpy for the Append at the
+# bottom of update_hosted_service) ride on the ArcGIS Pro session. That means
+# signing Pro into a different account silently breaks this pipeline — the
+# layers still read fine, but every delete fails with the unhelpful
+# "This operation is not supported (400)".
+#
+# So: verify the identity up front and refuse to touch AGOL as the wrong user.
+# ArcGIS Pro must stay signed in as AGOL_EXPECTED_USERNAME for scheduled runs.
+EXPECTED_USERNAME = config.AGOL_EXPECTED_USERNAME
+
+gis = None
+agol_block_reason = None
+
 try:
     gis = GIS("pro")
-    connected_username = None
-    try: connected_username = gis.users.me.username
-    except Exception:
-        try:
-            up = gis.properties.get("user",None)
-            if isinstance(up,dict): connected_username = up.get("username")
-            elif hasattr(up,"username"): connected_username = up.username
-        except Exception: pass
-    if not connected_username: connected_username = "unknown"
-    logger.info(f"✓ Connected as: {connected_username} ({gis.properties.get('portalName','unknown')})")
-    if connected_username == "unknown": raise RuntimeError("GIS('pro') unknown user")
 except Exception as e:
-    logger.warning(f"⚠ GIS('pro') failed: {e}. Using explicit credentials fallback...")
-    try:
-        gis = GIS("https://www.arcgis.com", config.AGOL_USERNAME, config.AGOL_PASSWORD)  # from config
-        connected_username = gis.users.me.username if getattr(gis.users.me,"username",None) else "unknown"
-        if connected_username == "unknown": raise RuntimeError("Fallback yielded unknown user")
-        logger.info(f"✓ Connected (fallback) as: {connected_username}")
-    except Exception as e2:
-        logger.error(f"✗ AGOL connection failed: {e2}\n{traceback.format_exc()}")
-        sys.exit(1)
+    agol_block_reason = (f"could not connect to AGOL via the ArcGIS Pro session: {e}. "
+                         f"Sign ArcGIS Pro in as {EXPECTED_USERNAME}.")
+    logger.error(f"✗ {agol_block_reason}\n{traceback.format_exc()}")
+
+if gis is not None:
+    try: connected_username = gis.users.me.username
+    except Exception: connected_username = None
+    if connected_username != EXPECTED_USERNAME:
+        agol_block_reason = (f"AGOL identity mismatch — ArcGIS Pro is signed in as "
+                             f"'{connected_username}', but this pipeline must run as "
+                             f"'{EXPECTED_USERNAME}' (the account with edit rights on the "
+                             f"service). Refusing to edit AGOL. Sign ArcGIS Pro back in as "
+                             f"{EXPECTED_USERNAME} and re-run.")
+        logger.error(f"✗ {agol_block_reason}")
+    else:
+        logger.info(f"✓ Connected as: {connected_username} ({gis.properties.get('portalName','unknown')})")
 
 SERVICE_ITEM_ID = config.AGOL_SERVICE_ITEM_ID  # from config, not hardcoded
 logger.info(f"Target service ID: {SERVICE_ITEM_ID}")
@@ -846,6 +851,12 @@ def update_hosted_service(item_id, gdb_path, temp_pc_path=None):
         if item is None: logger.error(f"✗ Item not found: {item_id}"); return False
         logger.info(f"Found service: {item.title} (Owner: {item.owner})")
         flc = FeatureLayerCollection.fromitem(item)
+        # The pipeline replaces all features, so Delete is mandatory. Without it
+        # AGOL rejects each delete with a bare "This operation is not supported".
+        caps = str(flc.properties.get("capabilities",""))
+        if "Delete" not in caps:
+            logger.error(f"✗ Service does not permit Delete for this account (capabilities: {caps})")
+            return False
         layer_mapping = {"iNat_AllProgrammes":"iNat_AllProgrammes","iNat_Eradication":"iNat_Eradication",
                          "iNat_ProgressiveContainment":"iNat_ProgressiveContainment","iNat_Exclusion":"iNat_Exclusion"}
         ok, fail = 0, 0
@@ -884,6 +895,7 @@ email_success = False
 logger.info("\n" + "="*70 + "\nUPDATING ARCGIS ONLINE\n" + "="*70)
 agol_success = False
 try:
+    if agol_block_reason: raise RuntimeError(agol_block_reason)
     arcpy.env.workspace = ""; arcpy.ClearWorkspaceCache_management(); time.sleep(1)
     arcpy.env.workspace = output_gdb; arcpy.ClearWorkspaceCache_management()
     fcs = arcpy.ListFeatureClasses()
@@ -951,9 +963,14 @@ try:
         for name, info in results.get("staff_notifications", {}).items()
         if info.get("count", 0) > 0
     ]
+    # Notifiable observations that reached nobody (unmapped operating area).
+    # Surfaced in the summary email so they can't disappear the way the
+    # 10 Jul 2026 Solanum mauritianum alert did.
+    undeliverable = results.get("undeliverable", [])
     summary = {"success":agol_success,"total_observations":len(gdf_all),"new_observations":len(new_obs_ids),
                "observations_by_programme":{"Progressive Containment":len(gdf_progressive_joined),"Eradication":len(gdf_eradication_joined),"Exclusion":len(gdf_exclusion_joined)},
-               "agol_updated":agol_success,"email_alerts_sent":email_success,"staff_notified":staff_notified,"errors":[]}
+               "agol_updated":agol_success,"email_alerts_sent":email_success,"staff_notified":staff_notified,
+               "undeliverable":undeliverable,"errors":[]}
     if send_run_summary(summary, ADMIN_EMAIL): logger.info("✓ Run summary email sent")
     else: logger.warning("⚠ Run summary email failed")
 except Exception as e: logger.warning(f"⚠ Could not send run summary: {e}")

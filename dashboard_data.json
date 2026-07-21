@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-21T05:15:25Z",
+  "last_updated": "2026-07-21T17:10:27Z",
   "total_observations": 542,
   "new_observations": 0,
   "date_breakdown": {
@@ -168,15 +168,15 @@
     }
   },
   "system": {
-    "agol_status": "success",
-    "email_status": "none needed",
+    "agol_status": "unknown",
+    "email_status": "unknown",
     "last_pipeline_run": null,
-    "log_file": "iNat_Pipeline_20260721_170517.log",
+    "log_file": "iNat_Pipeline_20260722_050018.log",
     "agol_live_counts": {
       "iNat_Exclusion": 3,
       "iNat_Eradication": 142,
       "iNat_ProgressiveContainment": 397,
-      "iNat_AllProgrammes": 542
+      "iNat_AllProgrammes": 0
     }
   },
   "warnings": [],

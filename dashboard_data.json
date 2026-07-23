@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-07-22T17:10:26Z",
-  "total_observations": 542,
+  "last_updated": "2026-07-23T05:15:25Z",
+  "total_observations": 543,
   "new_observations": 0,
   "date_breakdown": {
-    "last_7_days": 0,
+    "last_7_days": 1,
     "last_30_days": 3,
     "last_3_months": 12,
     "last_year": 76,
@@ -114,22 +114,22 @@
       "source": "gdb"
     },
     "progressive_containment": {
-      "count": 397,
+      "count": 398,
       "species_in_list": 23,
       "unique_observed": 9,
       "smu_match_rate": 99.5,
       "in_managed_site": 43,
       "not_in_managed_site": 116,
-      "gpnz_excluded": 238,
+      "gpnz_excluded": 239,
       "most_recent": {
-        "date": "2026-07-10",
-        "species": "BAP",
-        "location": "TR"
+        "date": "2026-07-23",
+        "species": "OMB",
+        "location": "PN"
       },
       "species_breakdown": [
         {
           "species": "OMB",
-          "count": 179
+          "count": 180
         },
         {
           "species": "BAP",
@@ -171,16 +171,23 @@
     "agol_status": "success",
     "email_status": "none needed",
     "last_pipeline_run": null,
-    "log_file": "iNat_Pipeline_20260723_050017.log",
+    "log_file": "iNat_Pipeline_20260723_170516.log",
     "agol_live_counts": {
       "iNat_Exclusion": 3,
       "iNat_Eradication": 142,
-      "iNat_ProgressiveContainment": 397,
-      "iNat_AllProgrammes": 542
+      "iNat_ProgressiveContainment": 398,
+      "iNat_AllProgrammes": 543
     }
   },
   "warnings": [],
   "recent_observations": [
+    {
+      "species": "OMB",
+      "category": "Progressive Containment",
+      "location": "PN",
+      "observed_on": "2026-07-23",
+      "id": 384153300
+    },
     {
       "species": "BAP",
       "category": "Progressive Containment",
@@ -313,13 +320,6 @@
       "location": "HW",
       "observed_on": "2026-03-28",
       "id": 345624198
-    },
-    {
-      "species": "OMB",
-      "category": "Progressive Containment",
-      "location": "WH",
-      "observed_on": "2026-03-22",
-      "id": 344349306
     }
   ]
 }

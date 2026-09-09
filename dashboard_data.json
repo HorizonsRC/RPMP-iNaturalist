@@ -1,14 +1,14 @@
 {
-  "last_updated": "2026-09-08T17:10:24Z",
-  "total_observations": 551,
+  "last_updated": "2026-09-09T05:15:27Z",
+  "total_observations": 0,
   "new_observations": 0,
   "date_breakdown": {
     "last_7_days": 0,
-    "last_30_days": 2,
-    "last_3_months": 9,
-    "last_year": 80,
-    "older_than_1_year": 455,
-    "unknown": 5
+    "last_30_days": 0,
+    "last_3_months": 0,
+    "last_year": 0,
+    "older_than_1_year": 0,
+    "unknown": 0
   },
   "categories": {
     "eradication": {
@@ -172,10 +172,10 @@
     }
   },
   "system": {
-    "agol_status": "success",
+    "agol_status": "unknown",
     "email_status": "none needed",
     "last_pipeline_run": null,
-    "log_file": "iNat_Pipeline_20260909_050017.log",
+    "log_file": "iNat_Pipeline_20260909_170516.log",
     "agol_live_counts": {
       "iNat_Exclusion": 3,
       "iNat_Eradication": 143,
@@ -184,146 +184,5 @@
     }
   },
   "warnings": [],
-  "recent_observations": [
-    {
-      "species": "OMB",
-      "category": "Progressive Containment",
-      "location": "PN",
-      "observed_on": "2026-09-01",
-      "id": 396296100
-    },
-    {
-      "species": "BAP",
-      "category": "Progressive Containment",
-      "location": "PN",
-      "observed_on": "2026-08-14",
-      "id": 391019154
-    },
-    {
-      "species": "EBT",
-      "category": "Progressive Containment",
-      "location": "HW",
-      "observed_on": "2026-08-01",
-      "id": 388009220
-    },
-    {
-      "species": "MPT",
-      "category": "Progressive Containment",
-      "location": "PN",
-      "observed_on": "2026-08-01",
-      "id": 387084883
-    },
-    {
-      "species": "BAP",
-      "category": "Progressive Containment",
-      "location": "HW",
-      "observed_on": "2026-07-30",
-      "id": 386427555
-    },
-    {
-      "species": "OMB",
-      "category": "Progressive Containment",
-      "location": "PN",
-      "observed_on": "2026-07-23",
-      "id": 384153300
-    },
-    {
-      "species": "BAP",
-      "category": "Progressive Containment",
-      "location": "TR",
-      "observed_on": "2026-07-10",
-      "id": 379925083
-    },
-    {
-      "species": "WNS",
-      "category": "Eradication",
-      "location": "PN",
-      "observed_on": "2026-07-09",
-      "id": 379811554
-    },
-    {
-      "species": "CON",
-      "category": "Progressive Containment",
-      "location": "TH",
-      "observed_on": "2026-07-06",
-      "id": 379628751
-    },
-    {
-      "species": "WNS",
-      "category": "Eradication",
-      "location": "PN",
-      "observed_on": "2026-06-16",
-      "id": 372182200
-    },
-    {
-      "species": "OMB",
-      "category": "Progressive Containment",
-      "location": "TR",
-      "observed_on": "2026-06-13",
-      "id": 371138140
-    },
-    {
-      "species": "BAP",
-      "category": "Progressive Containment",
-      "location": "PN",
-      "observed_on": "2026-05-21",
-      "id": 363590567
-    },
-    {
-      "species": "GWO",
-      "category": "Progressive Containment",
-      "location": "WH",
-      "observed_on": "2026-05-09",
-      "id": 360157799
-    },
-    {
-      "species": "WNS",
-      "category": "Eradication",
-      "location": "WH",
-      "observed_on": "2026-05-06",
-      "id": 360502453
-    },
-    {
-      "species": "BAP",
-      "category": "Progressive Containment",
-      "location": "WH",
-      "observed_on": "2026-05-06",
-      "id": 360502483
-    },
-    {
-      "species": "CHR",
-      "category": "Eradication",
-      "location": "WH",
-      "observed_on": "2026-05-06",
-      "id": 361614783
-    },
-    {
-      "species": "GWO",
-      "category": "Progressive Containment",
-      "location": "HW",
-      "observed_on": "2026-04-26",
-      "id": 356819306
-    },
-    {
-      "species": "BAP",
-      "category": "Progressive Containment",
-      "location": "HW",
-      "observed_on": "2026-04-26",
-      "id": 356816741
-    },
-    {
-      "species": "BAP",
-      "category": "Progressive Containment",
-      "location": "HW",
-      "observed_on": "2026-04-25",
-      "id": 356806837
-    },
-    {
-      "species": "BAP",
-      "category": "Progressive Containment",
-      "location": "HW",
-      "observed_on": "2026-04-25",
-      "id": 356810616
-    }
-  ]
+  "recent_observations": []
 }

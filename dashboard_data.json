@@ -1,11 +1,11 @@
 {
-  "last_updated": "2026-10-11T04:15:24Z",
+  "last_updated": "2026-10-11T16:10:25Z",
   "total_observations": 561,
   "new_observations": 0,
   "date_breakdown": {
     "last_7_days": 1,
-    "last_30_days": 7,
-    "last_3_months": 7,
+    "last_30_days": 6,
+    "last_3_months": 8,
     "last_year": 79,
     "older_than_1_year": 462,
     "unknown": 5
@@ -175,7 +175,7 @@
     "agol_status": "success",
     "email_status": "none needed",
     "last_pipeline_run": null,
-    "log_file": "iNat_Pipeline_20261011_170515.log",
+    "log_file": "iNat_Pipeline_20261012_050018.log",
     "agol_live_counts": {
       "iNat_Exclusion": 3,
       "iNat_Eradication": 148,

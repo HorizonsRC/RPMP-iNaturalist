@@ -1,10 +1,10 @@
 {
-  "last_updated": "2026-10-17T04:15:24Z",
-  "total_observations": 563,
+  "last_updated": "2026-10-17T16:10:25Z",
+  "total_observations": 564,
   "new_observations": 0,
   "date_breakdown": {
     "last_7_days": 3,
-    "last_30_days": 6,
+    "last_30_days": 7,
     "last_3_months": 8,
     "last_year": 78,
     "older_than_1_year": 463,
@@ -12,22 +12,22 @@
   },
   "categories": {
     "eradication": {
-      "count": 148,
+      "count": 149,
       "species_in_list": 27,
       "unique_observed": 14,
       "smu_match_rate": 99.3,
       "in_managed_site": 51,
-      "not_in_managed_site": 97,
+      "not_in_managed_site": 98,
       "gpnz_excluded": null,
       "most_recent": {
-        "date": "2026-09-29",
+        "date": "2026-10-16",
         "species": "WNS",
-        "location": "WH"
+        "location": "HW"
       },
       "species_breakdown": [
         {
           "species": "WNS",
-          "count": 60
+          "count": 61
         },
         {
           "species": "PLS",
@@ -173,14 +173,14 @@
   },
   "system": {
     "agol_status": "success",
-    "email_status": "none needed",
+    "email_status": "unknown",
     "last_pipeline_run": null,
-    "log_file": "iNat_Pipeline_20261017_170517.log",
+    "log_file": "iNat_Pipeline_20261018_050017.log",
     "agol_live_counts": {
       "iNat_Exclusion": 3,
-      "iNat_Eradication": 148,
+      "iNat_Eradication": 149,
       "iNat_ProgressiveContainment": 412,
-      "iNat_AllProgrammes": 563
+      "iNat_AllProgrammes": 564
     }
   },
   "warnings": [],
@@ -191,6 +191,13 @@
       "location": "PN",
       "observed_on": "2026-10-16",
       "id": 408782987
+    },
+    {
+      "species": "WNS",
+      "category": "Eradication",
+      "location": "HW",
+      "observed_on": "2026-10-16",
+      "id": 408861489
     },
     {
       "species": "OMB",
@@ -211,7 +218,7 @@
       "category": "Eradication",
       "location": "WH",
       "observed_on": "2026-09-29",
-      "id": 404346740
+      "id": 404346584
     },
     {
       "species": "WNS",
@@ -232,7 +239,7 @@
       "category": "Eradication",
       "location": "WH",
       "observed_on": "2026-09-29",
-      "id": 404346584
+      "id": 404346740
     },
     {
       "species": "BSD",
@@ -317,13 +324,6 @@
       "location": "PN",
       "observed_on": "2026-07-09",
       "id": 379811554
-    },
-    {
-      "species": "CON",
-      "category": "Progressive Containment",
-      "location": "TH",
-      "observed_on": "2026-07-06",
-      "id": 379628751
     }
   ]
 }

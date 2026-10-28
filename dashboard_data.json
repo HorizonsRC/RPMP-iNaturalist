@@ -1,12 +1,12 @@
 {
-  "last_updated": "2026-10-28T04:15:26Z",
-  "total_observations": 568,
+  "last_updated": "2026-10-28T16:10:27Z",
+  "total_observations": 569,
   "new_observations": 0,
   "date_breakdown": {
-    "last_7_days": 3,
-    "last_30_days": 10,
+    "last_7_days": 4,
+    "last_30_days": 9,
     "last_3_months": 8,
-    "last_year": 72,
+    "last_year": 73,
     "older_than_1_year": 470,
     "unknown": 5
   },
@@ -114,17 +114,17 @@
       "source": "gdb"
     },
     "progressive_containment": {
-      "count": 416,
+      "count": 417,
       "species_in_list": 23,
       "unique_observed": 10,
       "smu_match_rate": 99.5,
       "in_managed_site": 43,
-      "not_in_managed_site": 101,
+      "not_in_managed_site": 102,
       "gpnz_excluded": 272,
       "most_recent": {
-        "date": "2026-10-25",
-        "species": "OMB",
-        "location": "TR"
+        "date": "2026-10-28",
+        "species": "BAP",
+        "location": "PN"
       },
       "species_breakdown": [
         {
@@ -133,7 +133,7 @@
         },
         {
           "species": "BAP",
-          "count": 95
+          "count": 96
         },
         {
           "species": "BSD",
@@ -175,22 +175,22 @@
     "agol_status": "success",
     "email_status": "none needed",
     "last_pipeline_run": null,
-    "log_file": "iNat_Pipeline_20261028_170519.log",
+    "log_file": "iNat_Pipeline_20261029_050018.log",
     "agol_live_counts": {
       "iNat_Exclusion": 3,
       "iNat_Eradication": 149,
-      "iNat_ProgressiveContainment": 416,
-      "iNat_AllProgrammes": 568
+      "iNat_ProgressiveContainment": 417,
+      "iNat_AllProgrammes": 569
     }
   },
   "warnings": [],
   "recent_observations": [
     {
-      "species": "OMB",
+      "species": "BAP",
       "category": "Progressive Containment",
-      "location": "TR",
-      "observed_on": "2026-10-25",
-      "id": 410877436
+      "location": "PN",
+      "observed_on": "2026-10-28",
+      "id": 411312346
     },
     {
       "species": "OMB",
@@ -198,6 +198,13 @@
       "location": "TR",
       "observed_on": "2026-10-25",
       "id": 410874330
+    },
+    {
+      "species": "OMB",
+      "category": "Progressive Containment",
+      "location": "TR",
+      "observed_on": "2026-10-25",
+      "id": 410877436
     },
     {
       "species": "OMB",
@@ -310,13 +317,6 @@
       "location": "PN",
       "observed_on": "2026-08-14",
       "id": 391019154
-    },
-    {
-      "species": "EBT",
-      "category": "Progressive Containment",
-      "location": "HW",
-      "observed_on": "2026-08-01",
-      "id": 388009220
     },
     {
       "species": "MPT",
